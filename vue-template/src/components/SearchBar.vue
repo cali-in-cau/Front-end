@@ -11,7 +11,7 @@
                         <tbody>          
                             <tr v-for="(item, index) in testDB" :key="index" @click="clickStock(item)">
                                 <slot :row="item">
-                                    <td><a href="/stock"><p>{{item}}</p></a></td>
+                                    <td><a :href="`/stock/${item}`" @click="clickStock(item)" ><p>{{item}}</p></a></td>
                                 </slot>
                             </tr>
                         </tbody>
@@ -54,8 +54,9 @@ export default {
         },
         // 클릭 시 해당 주식 정보 띄워주는 화면으로 갈 수 있게끔!
         clickStock(item){
-            console.log(item);
-        }
+            console.log(item, " push ");
+            this.$route.push({name:"Stock Search", params:{"id":item}});
+        },
     }
     
 }

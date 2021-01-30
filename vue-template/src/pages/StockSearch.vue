@@ -12,6 +12,7 @@
                     <template slot="header">
                         <h5 class="card-category">Brief Info</h5>
                         <h2 class="card-title">1주 가격</h2>
+                        <h2>{{stockName}}</h2>
                     </template>
                 </card>
             </div>
@@ -34,11 +35,34 @@ import {
 } from "@/components/index";
 
 import SearchBar from '@/components/SearchBar';
+import axios from "axios";
 
 export default {
+
+    data(){
+        return{
+            stockName: "",
+        }
+    },
+    
     components:{
         Card,
         SearchBar
     },
+    created: function(){
+        console.log("Stock Name:", this.$route.params.data)
+        this.stockName = this.$route.params.data;
+      
+        axios.get("/back/stocks/data/MSFT")
+        .then(function(res){
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+        
+    },
+    
+    
 }
 </script>
