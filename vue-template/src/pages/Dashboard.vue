@@ -109,40 +109,9 @@
     </div>
     <div class="row">
 
-    <!--
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card
-        type="chart"
-        cardCol
-        >
-        <template slot="header">
-          <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
-          <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i> 763,215</h3>
-        </template>
-          
-        </card>
-      </div>
-      -->
+      <!-- yae 유사도 그래프, :stockName="stockName" 요런식으로 값을 넣어줘야함 나중에-->
+      <pattern-similarity></pattern-similarity>
 
-      <!-- yae 유사도 그래프 -->
-      <div class="col-lg-4">
-        <card
-        type="chart"
-        cardCol
-        >
-        <template slot="header">
-          <!-- <h5 class="card-category">{{$t('dashboard.dailySales')}}</h5> -->
-          <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i>Pattern Similarity</h3>
-        </template>
-          <bar-chart
-                  class="chart-area"
-                  chart-id="blue-bar-chart"
-                  :chart-data="blueBarChart.chartData"
-                  :gradient-stops="blueBarChart.gradientStops"
-                  :extra-options="blueBarChart.extraOptions">
-          </bar-chart>
-        </card>
-      </div>
       <div class="col-lg-4">
         <card
         type="chart"
@@ -196,20 +165,22 @@ import {
 
 
 import LineChart from '@/components/Charts/LineChart';
-import BarChart from '@/components/Charts/BarChart';
+//import BarChart from '@/components/Charts/BarChart';
 import * as chartConfigs from '@/components/Charts/config';
 import TaskList from './Dashboard/TaskList'
 //import UserTable from './Dashboard/UserTable'
 import config from '@/config';
+import PatternSimilarity from '@/components/PatternSimilarity'
 
 import SearchBar from '@/components/SearchBar';
 export default {
   components: {
     Card,
     LineChart,
-    BarChart,
+    //BarChart,
     TaskList,
-    SearchBar
+    SearchBar,
+    PatternSimilarity
     //UserTable
   },
   data(){
@@ -260,23 +231,6 @@ export default {
         },
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.2, 0],
-      },
-      blueBarChart: {
-        extraOptions: chartConfigs.barChartOptions,
-        chartData: {
-          labels: ['HeadAndShoulders', 'DoubleTop', 'RisingEdge'],
-          datasets: [{
-            label: "Countries",
-            fill: true,
-            borderColor: config.colors.info,
-            borderWidth: 2,
-            borderDash: [],
-            borderDashOffset: 0.0,
-            data: [90, 20,75],
-          }]
-        },
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.3, 0],
       },
       purpleLineChart: {
         extraOptions: chartConfigs.purpleChartOptions,
