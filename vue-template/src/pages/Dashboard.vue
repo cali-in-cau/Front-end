@@ -11,71 +11,9 @@
     <div class="row">
     <!-- Annie Stock Graph -->
       <div class="col-8">
-          <card
-          type="chart"
-          >
-          <template slot="header">
-            <div class="row">
-              <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-                <template v-if="!isRTL">
-                  <h5 class="card-category">Real Time Stock Graph</h5>
-                </template>
-                <template v-else>
-                  <h5 class="card-category">مجموع الشحنات</h5>
-                </template>
-                <template v-if="!isRTL">
-                  <h2 class="card-title">Samsung Electronics</h2>
-                </template>
-                <template v-else>
-                  <h2 class="card-title">  أداء</h2>
-                </template>
-              </div>
-              <div class="col-sm-6">
-                <div class="btn-group btn-group-toggle"
-                     data-toggle="buttons"
-                     :class="isRTL ? 'float-left' : 'float-right'">
-                     <template v-if="!isRTL">
-                       <label v-for="(option, index) in bigLineChartCategories"
-                              :key="option"
-                              class="btn btn-success btn-sm btn-simple"
-                              :class="{active:bigLineChart.activeIndex === index}"
-                              :id="index">
-                          <input type="radio"
-                                @click="initBigChart(index)"
-                                name="options" autocomplete="off"
-                                :checked="bigLineChart.activeIndex === index">
-                          {{ option }}
-                       </label>
-                     </template>
-                     <template v-else>
-                       <label v-for="(option, index) in bigLineChartCategoriesAr"
-                              :key="option"
-                              class="btn btn-success btn-sm btn-simple"
-                              :class="{active:bigLineChart.activeIndex === index}"
-                              :id="index">
-                          <input type="radio"
-                                @click="initBigChart(index)"
-                                name="options" autocomplete="off"
-                                :checked="bigLineChart.activeIndex === index">
-                          {{ option }}
-                       </label>
-                     </template>
-                </div>
-              </div>
-            </div>
-          </template>
-          <line-chart
-                      class="chart-area"
-                      ref="bigChart"
-                      chart-id="big-line-chart"
-                      :chart-data="bigLineChart.chartData"
-                      :gradient-colors="bigLineChart.gradientColors"
-                      :gradient-stops="bigLineChart.gradientStops"
-                      :extra-options="bigLineChart.extraOptions">
-          </line-chart>
-          </card>
-          </div>
-        
+        <stock-chart></stock-chart>
+      </div>
+
         <!-- Annie bookmark -->
         <div class="col-4">
           <card type="tasks">
@@ -109,9 +47,27 @@
     </div>
     <div class="row">
 
-      <!-- yae 유사도 그래프, :stockName="stockName" 요런식으로 값을 넣어줘야함 나중에-->
-      <pattern-similarity></pattern-similarity>
+    <!--
+      <div class="col-lg-4" :class="{'text-right': isRTL}">
+        <card
+        type="chart"
+        cardCol
+        >
+        <template slot="header">
+          <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
+          <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i> 763,215</h3>
+        </template>
+          
+        </card>
+      </div>
+      -->
 
+      <!-- yae 유사도 그래프 -->
+      <div class="col-lg-4">
+         <pattern-sim></pattern-sim>
+      </div>
+
+      <!-- Stock Info -->
       <div class="col-lg-4">
         <card
         type="chart"
@@ -130,6 +86,7 @@
           </line-chart>
         </card>  
       </div>
+      <!-- Notification -->
       <div class="col-lg-4">
         <card class="card">
           <template slot="header">
@@ -165,49 +122,28 @@ import {
 
 
 import LineChart from '@/components/Charts/LineChart';
-//import BarChart from '@/components/Charts/BarChart';
 import * as chartConfigs from '@/components/Charts/config';
 import TaskList from './Dashboard/TaskList'
 //import UserTable from './Dashboard/UserTable'
 import config from '@/config';
-import PatternSimilarity from '@/components/PatternSimilarity'
 
 import SearchBar from '@/components/SearchBar';
+import StockChart from '@/components/StockChart';
+import PatternSim from '@/components/PatternSim';
+
 export default {
   components: {
     Card,
     LineChart,
-    //BarChart,
     TaskList,
     SearchBar,
-    PatternSimilarity
+    StockChart,
+    PatternSim
     //UserTable
   },
   data(){
     return{
-      bigLineChartCategories:[
-        "1hour",
-        "1Day",
-        "1Month"
-      ],
-      bigLineChartCategoriesAr:[
-        "حسابات",
-        "المشتريات",
-        "جلسات"
-      ],
-      bigLineChart: {
-        allData: [
-          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-          [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-          [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
-        ],
-        activeIndex: 0,
-        chartData: { datasets: [{ }]},
-        extraOptions: chartConfigs.purpleChartOptions,
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.4, 0],
-        categories: []
-      },
+      //Stock Info
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
         chartData: {
@@ -232,30 +168,24 @@ export default {
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.2, 0],
       },
-      purpleLineChart: {
-        extraOptions: chartConfigs.purpleChartOptions,
+      //Pattern Similarity
+      blueBarChart: {
+        extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
+          labels: ['HeadAndShoulders', 'DoubleTop', 'RisingEdge'],
           datasets: [{
-            label: "My First dataset",
+            label: "Countries",
             fill: true,
-            borderColor: config.colors.danger,
+            borderColor: config.colors.info,
             borderWidth: 2,
             borderDash: [],
             borderDashOffset: 0.0,
-            pointBackgroundColor: config.colors.danger,
-            pointBorderColor: 'rgba(255,255,255,0)',
-            pointHoverBackgroundColor: config.colors.danger,
-            pointBorderWidth: 20,
-            pointHoverRadius: 4,
-            pointHoverBorderWidth: 15,
-            pointRadius: 4,
-            data: [90, 27, 60, 12, 80],
+            data: [90, 20,75],
           }]
         },
-        gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
-        gradientStops: [1, 0.4, 0],
-      }
+        gradientColors: config.colors.primaryGradient,
+        gradientStops: [1, 0.3, 0],
+      },
     }
   },
   computed:{
