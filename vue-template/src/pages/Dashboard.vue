@@ -90,17 +90,21 @@
       <div class="col-lg-4">
         <card class="card">
           <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.completedTasks')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-success "></i> 5+</h3>
+            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-success "></i> 4+</h3>
           </template>
-          <div class="table-responsive">
-            <p>notification example1</p>
-            <p>notification example2</p>
-            <p>notification example3</p>
-            <p>notification example4</p>
-            <p>notification example5</p>
-            <p>notification example6</p>
-            <p>notification example7</p>
+          <div class="content">
+            <base-alert type="success" dismissible>
+              <span><b> BULL - </b> CAB Inc. : +14.51% </span>
+            </base-alert>
+            <base-alert type="danger" dismissible>
+              <span><b> BEAR - </b> ABC corp. : -13.22%  </span>
+            </base-alert>
+            <base-alert type="info" dismissible>
+              <span><b> Info - </b> normal notification </span>
+            </base-alert>
+            <base-alert type="danger" dismissible>
+              <span><b> BEAR - </b> XYZ corp. : -7.83%  </span>
+            </base-alert>
           </div>
         </card>
       </div>
@@ -131,6 +135,10 @@ import SearchBar from '@/components/SearchBar';
 import StockChart from '@/components/StockChart';
 import PatternSim from '@/components/PatternSim';
 
+import BaseAlert from '@/components/BaseAlert';
+//import BaseButton from '@/components/BaseButton';
+import NotificationTemplate from './Notifications/NotificationTemplate';
+
 export default {
   components: {
     Card,
@@ -138,8 +146,10 @@ export default {
     TaskList,
     SearchBar,
     StockChart,
-    PatternSim
+    PatternSim,
     //UserTable
+    BaseAlert
+    //BaseButton
   },
   data(){
     return{
@@ -186,6 +196,11 @@ export default {
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.3, 0],
       },
+      //notification
+      type:["","info","success","warning","danger"],
+      notifications:{
+        topCenter: false
+      }
     }
   },
   computed:{
@@ -219,6 +234,17 @@ export default {
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
+    },
+    notifyVue(verticalAlign, horizontalAlign){
+      const color = Math.floor(Math.random() * 4 + 1);
+      this.$notify({
+        component: NotificationTemplate,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.type[color],
+        timeout: 0
+      });
     }
   },
   mounted(){
