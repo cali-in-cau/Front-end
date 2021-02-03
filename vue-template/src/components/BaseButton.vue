@@ -29,10 +29,12 @@ export default {
       type: String,
       default: "button"
     },
+    /*
     nativeType:{
       type: String,
       default: "button"
     },
+    */
     round: Boolean,
     icon: Boolean,
     block: Boolean,

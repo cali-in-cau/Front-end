@@ -11,7 +11,7 @@ import Modal from "./Modal";
 import CloseButton from "./CloseButton";
 import DropDown from "./Dropdown.vue";
 import Notifications from "./NotificationPlugin/index";
-
+/*
 let components = {
   Card,
   BaseInput,
@@ -27,7 +27,7 @@ let components = {
   DropDown,
   Notifications
 };
-
+*/
 export{
   Card,
   BaseInput,

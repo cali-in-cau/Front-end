@@ -4,7 +4,7 @@
 
     <side-bar :background-color="backgroundColor">
       <!-- <mobile-menu slot="content"></mobile-menu> -->
-      <sidebar-link to="/dashboard">
+      <sidebar-link to="/accept/dashboard">
         <i class="tim-icons icon-chart-pie-36"></i>
         <template v-if="!isRTL">
           <p>Dashboard</p>
@@ -14,7 +14,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/News">
+      <sidebar-link to="/accept/News">
         <i class="tim-icons icon-planet"></i>
         <template v-if="!isRTL">
           <p>News</p>
@@ -24,7 +24,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/icons">
+      <sidebar-link to="/accept/icons">
         <i class="tim-icons icon-bell-55"></i>
         <template v-if="!isRTL">
           <p>Notifications</p>
@@ -34,7 +34,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/notifications">
+      <sidebar-link to="/accept/notifications">
         <i class="tim-icons icon-settings-gear-63"></i>
         <template v-if="!isRTL">
           <p>Settings</p>
