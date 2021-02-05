@@ -10,7 +10,7 @@
 
                     <div class="card-body ml-auto mr-auto">
                         <h1 class="card-title text-center" style="width:60vw;" >Welcome to Stock Reader</h1>
-                        <button type="button" class="ml-auto mr-auto btn btn-round">Login using Google</button>
+                        <button type="button" class="ml-auto mr-auto btn btn-round" @click="login">Login using Google</button>
                     </div>
                 </card>
 
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+    import axios from "axios";
 
     import {
         Card
@@ -73,6 +74,16 @@
             toNonMem(){
                 return location.href='/non';
             },
+	    login(){
+		console.log("login click")
+		axios.get("accounts/google/login")
+		.then(function(res){
+			console.log(res);
+		})
+		.catch((err)=>{
+			console.log(err);
+		})
+	    },
         }
     }
 </script>
