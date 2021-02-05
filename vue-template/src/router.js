@@ -42,7 +42,7 @@ const routes = [
     name:"Login",
     component:FirstPage,
   },
-  
+   
   {
     path: "/accept",
     //component: FirstPage,
@@ -93,14 +93,15 @@ const routes = [
         name: "News",
         component: News
       },
-
+      
       //yae - page 이동 
       {
-        path: "stock/:data",
+        path: "/accept/stock/:data",
         name: "Stock Search",
         component: StockSearch,
         props: true
       },
+      
     ],
   },
   
@@ -129,10 +130,9 @@ const routes = [
         name: "News",
         component: News
       },
-
       //yae - page 이동 
       {
-        path: "stock/:data",
+        path: "/non/stock/:data",
         name: "Stock Search",
         component: StockSearch,
         props: true

@@ -4,7 +4,7 @@
     <!-- yae SearchBar component -->
     <div class="row"> 
       <div class="col-sm-12">
-        <search-bar></search-bar>
+        <search-bar :user="accept"></search-bar>
       </div>
     </div>
 
