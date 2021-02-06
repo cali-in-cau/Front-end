@@ -76,7 +76,7 @@ export default {
     created: function(){
 
         // 어떻게보면 주식 그래프 용도
-        console.log("Stock Name:", this.$route.params.data)
+        console.log("Stock Name:", this.$router.params)
         this.stockName = this.$route.params.data;
 
         //yae - 다음에 MSFT-> stockName으로 바꿔주기

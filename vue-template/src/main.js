@@ -33,6 +33,7 @@ import Notify from "@/components/NotificationPlugin";
 import i18n from "./i18n"
 import SideBar from "@/components/SidebarPlugin";
 
+import VueAuthenticate from 'vue-authenticate';
 
 Vue.config.productionTip = false;
 
@@ -46,6 +47,19 @@ const router = new VueRouter({
   routes, // short for routes: routes
   linkExactActiveClass: "active"
 });
+
+/*
+Vue.use(VueAuthenticate, {
+	providers:{
+		google:{
+			clientId: 'myID',
+			redirectUri: 'http://yaeoni.o-r.kr",
+			url: 'http://yaeoni.o-r.kr/back/accounts/login/google'
+		}
+	}
+});
+*/
+
 
 Vue.use(VueRouter);
 Vue.use(SocialSharing);
