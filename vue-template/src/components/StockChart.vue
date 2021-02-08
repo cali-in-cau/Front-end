@@ -11,7 +11,8 @@
                     </template>
                     <template>
                         <!-- 여기도 검색한 회사명 넣어줘야 함 -->
-                        <h2 class="card-title">Samsung Electronics</h2>
+                        <h2 class="card-title">{{corName}}</h2>
+                        
                     </template>
                 </div>
                 <!-- Buttons(Group) -->
@@ -64,6 +65,8 @@
 
 <script>
 
+import stockData from '../components/dumpSS.json';
+
 import {
   Card
 } from "@/components/index";
@@ -72,17 +75,23 @@ import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
 import config from '@/config';
 
+//import axios from 'axios'
+
 export default {
+
     components: {
         Card,
         LineChart
     },
     data(){
         return{
+
+            corName : "",
+
             //고정값
             bigLineChartCategories:[
-                "1hour",
                 "1Day",
+                "1Week",
                 "1Month"
             ],
             bigLineChartCategoriesAr:[
@@ -92,19 +101,28 @@ export default {
             ],
             //stock data
             bigLineChart: {
-                //여기 값을 파싱을 해야하는데 기준을 잡아야됨
+                //기준을 잡아야됨
+                 
                 allData: [
-                [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-                [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-                [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
+                    stockData.data.value.map(a=>a.Close),
+                    stockData.data.value.map(a=>a.Close),
+                    stockData.data.value.map(a=>a.Close)
+                    //[100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],//1번버튼
+                    //[80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],//2번버튼
+                    //[60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]//3번버튼
                 ],
+                
                 activeIndex: 0,
                 chartData: { datasets: [{ }]},
                 extraOptions: chartConfigs.purpleChartOptions,
                 gradientColors: config.colors.primaryGradient,
                 gradientStops: [1, 0.4, 0],
                 categories: []
-            }
+            },
+            
+            //list:undefined
+
+            
         }
     },
   computed:{
@@ -131,16 +149,49 @@ export default {
             pointHoverRadius: 4,
             pointHoverBorderWidth: 15,
             pointRadius: 4,
+            //찾았다 데이터
             data: this.bigLineChart.allData[index]
         }],
-        //여기도 라벨을 어떻게 붙일지...
-        labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+        //라벨 여기있다
+        /*axios.get('/back/stocks/data/MSFT')
+                .then(res=>{
+                    console.log(res)
+                    this.list = res.data.info;
+                    this.val = res.data.value;
+                    //~~
+                    this.close = val.map(a => a.Close)
+
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+        labels: res.data.date
+        //아 이거 이렇게 적어도 되는걸까ㅋㅎㅠ */
+        labels: stockData.data.date,
+        corName: stockData.info.name
+
+        //labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
       }
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
+
     }
   },
+  mounted(){
+    this.i18n = this.$i18n;
+    if (this.enableRTL) {
+      this.i18n.locale = 'ar';
+      this.$rtl.enableRTL();
+    }
+    this.initBigChart(0);
+  },
+  beforeDestroy() {
+    if (this.$rtl.isRTL) {
+      this.i18n.locale = 'en';
+      this.$rtl.disableRTL();
+    }
+  }
 }
 </script>
 <style>

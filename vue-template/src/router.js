@@ -65,11 +65,13 @@ const routes = [{
 
     //yae - page 이동 
     {
-      path: "stock",
+      path: "stock/:data",
       name: "Stock Search",
-      component: StockSearch
+      component: StockSearch,
+      props: true
     },
-  ]
+  ],
+
 
 }];
 

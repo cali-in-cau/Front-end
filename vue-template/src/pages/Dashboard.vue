@@ -62,7 +62,7 @@
       </div>
       -->
 
-      <!-- yae 유사도 그래프 -->
+      <!-- yae 유사도 그래프, :stockName="stockName" 요런식으로 값을 넣어줘야함 나중에-->
       <div class="col-lg-4">
          <pattern-sim></pattern-sim>
       </div>

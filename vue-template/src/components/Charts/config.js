@@ -136,6 +136,7 @@ export let orangeChartOptions = {
   }
 
 }
+//Annie - stockgraph
 export let greenChartOptions = {
   ...basicOptions,
   tooltips: {
@@ -157,8 +158,8 @@ export let greenChartOptions = {
         zeroLineColor: "transparent",
       },
       ticks: {
-        suggestedMin: 50,
-        suggestedMax: 125,
+        suggestedMin: 50000,
+        suggestedMax: 125000,
         padding: 20,
         fontColor: "#9e9e9e"
       }
