@@ -17,6 +17,10 @@ import News from "@/pages/News.vue";
 //yae
 import StockSearch from "@/pages/StockSearch.vue";
 import FirstPage from "@/pages/FirstPage.vue"
+
+import axios from 'axios';
+//import Vue from 'vue';
+
 /*
 let authPages = {
   path: "/",
@@ -45,9 +49,21 @@ const routes = [
    
   {
     path: "/accept",
-    //component: FirstPage,
-    //redirect: "main",
     component: DashboardLayout,
+    beforeEnter:async (to, from, next) =>{
+	await axios.get('/back/users/get_user')
+	    .then((res)=>{
+		if(res.data.success == false){
+			alert('로그인 해주세요!');
+			next('/');
+		}
+	    })
+	    .catch((err)=>{
+		console.log(err);
+	    });
+
+	    next();
+    },
     redirect: "accept/dashboard",
 
     // yae - nested routing 을 위한 것이었따.

@@ -75,18 +75,23 @@
                 return location.href='/non';
             },
 	    login(){
-		
-                return location.href='http://yaeoni.o-r.kr/back/accounts/google/login';
-		/*
-		console.log("login click")
-		axios.get("/back/accounts/google/login")
-			.then(function(res){
-				console.log(res);
+                this.$gAuth.signIn()
+                .then(async (GoogleUser) => {
+			console.log("login success")
+
+			await axios.post('/back/users/register', { token:GoogleUser.getBasicProfile().getEmail()})
+			.then(res=>{
+				console.log("login :", res.data.success);
 			})
-			.catch((err)=>{
+			.catch(err=>{
 				console.log(err);
-			})
-		*/
+			});
+                return location.href='/accept';
+
+                })
+                .catch((error)=>{
+                        console.log("Login-error",error);
+                });
 	    },
         }
     }

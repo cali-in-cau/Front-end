@@ -68,7 +68,7 @@
                   <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Profile</a></li>
                   <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Settings</a></li>
                   <li class="dropdown-divider"></li>
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Log out</a></li>
+                  <li class="nav-link"><a href="/" @click="logout" class="nav-item dropdown-item">Log out</a></li>
                 </ul>
               </drop-down>
         </ul>
@@ -77,6 +77,7 @@
   </nav>
 </template>
 <script>
+import axios from "axios";
 
 import DropDown from "@/components/Dropdown.vue";
 import Modal from "@/components/Modal.vue";
@@ -99,6 +100,18 @@ import {
       };
     },
     methods:{
+      logout(){
+	this.$gAuth.signOut()
+	axios.get('/back/users/logout')
+	.then((res)=>{
+		console.log(res);
+	})
+	.catch((err)=>{
+		console.log("logout catch", err);
+	});
+
+        console.log("log out!");
+      },
       toggleSidebar(){
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
       },
