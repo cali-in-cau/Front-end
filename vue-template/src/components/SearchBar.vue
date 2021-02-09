@@ -11,8 +11,17 @@
                         <tbody>          
                             <tr v-for="(item, index) in stockList" :key="index">
                                 <slot :row="item">
-                                    <td><router-link :to="{name: 'Stock Search', params: { info:info, code: item.code, name:item.name }}" ><p>{{item.name}}</p></router-link></td>
+                                    <!--
+                                    <td><router-link :to="{ path: '/'+info+'/stock/'+ item.code}" :name="item.name" ><p>{{item.name}}</p></router-link></td>
+                                    -->
+                                    
+                                    <td>
+                                        <router-link v-if="isMember" :to="{name: 'Stock Search', params: { code: item.code, name:item.name }}" ><p>{{item.name}}</p></router-link>
+                                        <router-link v-else :to="{name: 'Stock Search ', params: { code: item.code, name:item.name }}" ><p>{{item.name}}</p></router-link>
 
+                                    </td>
+                                    
+                                    
                                 </slot>
                             </tr>
                         </tbody>
@@ -42,6 +51,9 @@ export default {
                 "삼성 전자"
             ],
             stockName:"",
+            
+            isMember:true,
+            
         }
     },
     props:['info'],
@@ -49,7 +61,7 @@ export default {
         //Search 연동 - yae
         searchStock(stockName){
             // 이제 이걸 백으로 넘겨서 데이터 받으면 된다.
-            console.log(stockName)
+            console.log("info", this.info)
             //if(this.stockList.indexOf(this.stockName.replace(/\s+/g, '')) >-1){
             //    this.showSearch = true;
             //}else{
@@ -71,6 +83,11 @@ export default {
                 
         },
     },
+    created: function(){
+        if(this.info=="non"){
+            this.isMember=false
+        }
+    }
     
 }
 </script>

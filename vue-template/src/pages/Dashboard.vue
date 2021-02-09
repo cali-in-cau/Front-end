@@ -4,7 +4,7 @@
     <!-- yae SearchBar component -->
     <div class="row"> 
       <div class="col-sm-12">
-        <search-bar :user="accept"></search-bar>
+        <search-bar :info="info"></search-bar>
       </div>
     </div>
 
@@ -153,6 +153,8 @@ export default {
   },
   data(){
     return{
+      //user Info
+      info:"accpet",
       //Stock Info
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,

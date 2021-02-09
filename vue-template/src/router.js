@@ -16,7 +16,7 @@ import News from "@/pages/News.vue";
 
 //yae
 import StockSearch from "@/pages/StockSearch.vue";
-import FirstPage from "@/pages/FirstPage.vue"
+import FirstPage from "@/pages/FirstPage.vue";
 
 import axios from 'axios';
 //import Vue from 'vue';
@@ -51,16 +51,16 @@ const routes = [
     path: "/accept",
     component: DashboardLayout,
     beforeEnter:async (to, from, next) =>{
-	await axios.get('/back/users/get_user')
-	    .then((res)=>{
-		if(res.data.success == false){
-			alert('로그인 해주세요!');
-			next('/');
-		}
-	    })
-	    .catch((err)=>{
-		console.log(err);
-	    });
+      await axios.get('/back/users/get_user')
+        .then((res)=>{
+          if(res.data.success == false){
+            alert('로그인 해주세요!');
+            next();
+            }
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
 
 	    next();
     },
@@ -148,86 +148,14 @@ const routes = [
       },
       //yae - page 이동 
       {
-        path: "/non/stock/:data",
-        name: "Stock Search",
+        path: "/non/stock/:code",
+        name: "Stock Search ",
         component: StockSearch,
         props: true
       },
     ],
   },
 
-
 ];
 
-
-/*
-const routes = [{
-  path: "/",
-  //component: FirstPage,
-  //redirect: "main",
-  component: DashboardLayout,
-  redirect: "dashboard",
-
-  // yae - nested routing 을 위한 것이었따.
-  children:[
-    {
-      path: "main",
-      name: "Main",
-      component: FirstPage
-    },
-
-    {
-      path: "dashboard",
-      name: "Dashboard",
-      component: Dashboard
-    },
-    {
-      // yae - 나중에 컴포넌트를 만들어서 바꿔줘야함
-      path: "icons",
-      name: "News",
-      component: Icons
-    },
-    {
-      path: "maps",
-      name: "Maps",
-      component: Maps
-    },
-    {
-      path: "notifications",
-      name: "Notifications",
-      component: Notifications
-    },
-    {
-      path: "user",
-      name: "User Profile",
-      component: UserProfile
-    },
-    {
-      path: "table",
-      name: "Table List",
-      component: TableList
-    },
-    {
-      path: "typography",
-      name: "Typography",
-      component: Typography
-    },
-    {
-      path: "news",
-      name: "News",
-      component: News
-    },
-
-    //yae - page 이동 
-    {
-      path: "stock/:data",
-      name: "Stock Search",
-      component: StockSearch,
-      props: true
-    },
-  ],
-
-
-}];
-*/
 export default routes;
