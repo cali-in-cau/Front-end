@@ -10,8 +10,19 @@
             <div class="col-sm-4">
                 <card>
                     <template slot="header">
-                        <h5 class="card-category">Brief Info</h5>
-                        <h3 class="card-title">{{name}}</h3>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <h5 class="card-category">Brief Info</h5>
+                            <h3 class="card-title">{{name}}</h3>
+                        </div>
+                        	
+                        <div class="col-sm-2">
+                            <button v-if="isMember" class="card-title btn-rotate btn btn-link btn-icon" type="primary" @click="setFavorite">
+                                <i class="tim-icons icon-simple-add"></i>
+                            </button>  
+                        </div>
+                    </div>
+                    
                         <h2 class>{{stockPrice}}원</h2>
                     </template>
                 </card>
@@ -51,7 +62,7 @@ import SearchBar from '@/components/SearchBar';
 import BaseTable from "@/components/BaseTable";
 import PatternSim from '@/components/PatternSim'
 
-//import axios from "axios";
+import axios from "axios";
 
 const tableColumns = ["전일", "고가", "시가", "저가"];
 
@@ -71,7 +82,33 @@ export default {
             },
             //stockName: "",
             stockPrice: "82,000",
+            isMember: false,
         }
+    },
+    methods:{
+        setFavorite: function(){
+            console.log("set Favorite~~~")
+            //var setFavoriteURL = "/back/users/favorite/add/"+this.$route.params.code
+            var token = ""
+            axios.get('/back/users/get_user')
+            .then((res)=>{
+                token = res.data.token;
+                console.log("get user data", res.data)
+                console.log("token", token)
+            })
+            .catch((err)=>{
+                console.log(err)
+            });
+
+            axios.post("/back/users/favorite/add/" + this.$route.params.code, {token:token})
+            .then((res)=>{
+                console.log("favorite add res: ", res)
+            })
+            .catch((err)=>{
+                console.log(err);
+            });
+
+        },
     },
     props:['name'],
     created: function(){
@@ -98,6 +135,12 @@ export default {
         }];
 
         this.details.data = exData;
+        
+        var currentPath = this.$router.currentRoute.path;
+        console.log("hey",this.$router.currentRoute.path)
+        if(currentPath.includes("accept")){
+            this.isMember = true;
+        }
     },
     
     

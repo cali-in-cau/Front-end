@@ -8,7 +8,7 @@
 	    <div class="row">
 		    <div class="col-sm-10">
 			<template>
-			    <h5 class="card-category">Real Time Stock Graph</h5>
+			    <h5 class="card-category">Real Time Analysis</h5>
 			</template>
 			<h3 class="card-title">Pattern Similarity</h3>
 		    </div>	
