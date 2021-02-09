@@ -112,7 +112,7 @@ const routes = [
       
       //yae - page 이동 
       {
-        path: "/accept/stock/:data",
+        path: "/accept/stock/:code",
         name: "Stock Search",
         component: StockSearch,
         props: true

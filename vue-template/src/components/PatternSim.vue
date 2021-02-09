@@ -5,11 +5,23 @@
         cardCol
         >
         <template slot="header">
-            <h3 class="card-title d-inline">Pattern Similarity</h3>
-            
-            <button class="card-title btn-rotate btn btn-link btn-icon" type="primary" @click="modals = true">
-            <i class="tim-icons icon-zoom-split"></i>
-            </button>   
+	    <div class="row">
+		    <div class="col-sm-10">
+			<template>
+			    <h5 class="card-category">Real Time Stock Graph</h5>
+			</template>
+			<h3 class="card-title">Pattern Similarity</h3>
+		    </div>	
+		
+		    <div class="col-sm-2">
+
+			<button class="card-title btn-rotate btn btn-link btn-icon" type="primary" @click="modals = true">
+			    <i class="tim-icons icon-zoom-split"></i>
+			</button>  
+		    </div>
+            </div>
+
+             
 
             <modal :show.sync="modals"
                     class="modal-search"

@@ -11,7 +11,7 @@
                 <card>
                     <template slot="header">
                         <h5 class="card-category">Brief Info</h5>
-                        <h3 class="card-title">{{stockName}}</h3>
+                        <h3 class="card-title">{{name}}</h3>
                         <h2 class>{{stockPrice}}원</h2>
                     </template>
                 </card>
@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="col-sm-4">
-                <pattern-sim :stockName="stockName"></pattern-sim>
+                <pattern-sim :stockName="name"></pattern-sim>
             </div>
         </div>
 
@@ -69,15 +69,14 @@ export default {
                 columns: [...tableColumns],
                 data: []
             },
-            stockName: "",
+            //stockName: "",
             stockPrice: "82,000",
         }
     },
+    props:['name'],
     created: function(){
 
         // 어떻게보면 주식 그래프 용도
-        console.log("Stock Name:", this.$router.params)
-        this.stockName = this.$route.params.data;
 
         //yae - 다음에 MSFT-> stockName으로 바꿔주기
         /*
