@@ -9,7 +9,9 @@
       </td>
       -->
       <td class="text-left">
-        <p class="title">{{row.stock_name}}</p>
+        <router-link :to="{name: 'Stock Search', params: { code: row.stock_code, name:row.stock_name }}" >
+          <p class="title">{{row.stock_name}}</p>
+        </router-link>
         <!--<p class="text-muted">{{row.description}}</p>-->
       </td>
       <td class="td-actions text-right">

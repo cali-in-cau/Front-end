@@ -86,6 +86,7 @@ export default {
             token:"",
         }
     },
+    props:['name'],
     methods:{
         setFavorite: function(){
             console.log("set Favorite~~~")
