@@ -2,17 +2,19 @@
   <base-table  :data="tableData"
               thead-classes="text-primary">
     <template slot-scope="{row}">
+      <!--
       <td>
         <base-checkbox v-model="row.done">
         </base-checkbox>
       </td>
+      -->
       <td class="text-left">
         <p class="title">{{row.title}}</p>
-        <p class="text-muted">{{row.description}}</p>
+        <!--<p class="text-muted">{{row.description}}</p>-->
       </td>
       <td class="td-actions text-right">
         <base-button type="link" artia-label="edit button">
-          <i class="tim-icons icon-pencil"></i>
+          <i class="tim-icons icon-simple-remove"></i>
         </base-button>
       </td>
     </template>
@@ -22,18 +24,49 @@
 
   import BaseButton from '@/components/BaseButton';
   import BaseTable from '@/components/BaseTable';
-  import BaseCheckbox from '@/components/BaseCheckbox';
+  //import BaseCheckbox from '@/components/BaseCheckbox';
 
   export default {
     components: {
       BaseButton,
       BaseTable,
-      BaseCheckbox
+      //BaseCheckbox
     },
-
+    props:['user'],
     computed: {
       tableData() {
-        return this.$t('dashboard.taskList');
+        return [
+      {
+        "title": "Yaewon",
+        "description": "Dwuamish Head, Seattle, WA 8:47 AM",
+        "done": false
+      },
+      {
+        "title": "GDPR Compliance",
+        "description": "The GDPR is a regulation that requires businesses to protect the personal data and privacy of Europe citizens for transactions that occur within EU member states.",
+        "done": true
+      },
+      {
+        "title": "Solve the issues",
+        "description": "Fifty percent of all respondents said they would be more likely to shop at a company",
+        "done": false
+      },
+      {
+        "title": "Release v2.0.0",
+        "description": "Ra Ave SW, Seattle, WA 98116, SUA 11:19 AM",
+        "done": false
+      },
+      {
+        "title": "Export the processed files",
+        "description": "The report also shows that consumers will not easily forgive a company once a breach exposing their personal data occurs.",
+        "done": false
+      },
+      {
+        "title": "Arival at export process",
+        "description": "Capitol Hill, Seattle, WA 12:34 AM",
+        "done": false
+      }
+    ]
       }
     }
   }

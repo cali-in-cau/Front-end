@@ -110,7 +110,6 @@ export default {
 
         },
     },
-    props:['name'],
     created: function(){
         console.log("crated stockName", this.name);
         // 어떻게보면 주식 그래프 용도

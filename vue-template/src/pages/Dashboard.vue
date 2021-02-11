@@ -18,25 +18,7 @@
         <div class="col-4">
           <card type="tasks">
             <template slot="header">
-              <template v-if="!isRTL">
-                <h6 class="title d-inline">Bookmark</h6>
-              </template>
-              <template v-else>
-                <h6 class="title d-inline">الشحنات</h6>
-              </template>
-              <template v-if="!isRTL">
-                <p class="card-category d-inline">Username</p>
-              </template>
-              <drop-down tag="div" :class="isRTL ? 'float-left' : ''">
-                <button aria-label="Settings menu" data-toggle="dropdown" class="dropdown-toggle btn-rotate btn btn-link btn-icon" :class="isRTL ? 'pl-5' : ''">
-                  <i class="tim-icons icon-settings-gear-63"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <a href="#pablo" class="dropdown-item">Action</a>
-                  <a href="#pablo" class="dropdown-item">Another Action</a>
-                  <a href="#pablo" class="dropdown-item">Something else</a>
-                </ul>
-              </drop-down>
+                <h3 class="card-title">BOOKMARK</h3>
             </template>
             <div class="table-full-width table-responsive">
               <task-list></task-list>
@@ -139,6 +121,8 @@ import BaseAlert from '@/components/BaseAlert';
 //import BaseButton from '@/components/BaseButton';
 import NotificationTemplate from './Notifications/NotificationTemplate';
 
+import axios from "axios";
+
 export default {
   components: {
     Card,
@@ -153,8 +137,10 @@ export default {
   },
   data(){
     return{
+      //user token
+      token:"",
       //user Info
-      info:"accpet",
+      info:"accept",
       //Stock Info
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
@@ -212,6 +198,17 @@ export default {
     isRTL(){
       return this.$rtl.isRTL;
     }
+  },
+  created: function(){
+    axios.get('/back/users/get_user')
+            .then((res)=>{
+                this.token = res.data.token;
+                console.log("get user data", res.data)
+                console.log("token", this.token)
+            })
+            .catch((err)=>{
+                console.log(err)
+            });
   },
   methods:{
     initBigChart(index) {
