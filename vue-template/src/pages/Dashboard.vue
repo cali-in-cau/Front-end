@@ -21,7 +21,7 @@
                 <h3 class="card-title">BOOKMARK</h3>
             </template>
             <div class="table-full-width table-responsive">
-              <task-list></task-list>
+              <task-list :token="token"></task-list>
             </div>
           </card>
 

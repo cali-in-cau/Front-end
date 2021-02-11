@@ -83,24 +83,23 @@ export default {
             //stockName: "",
             stockPrice: "82,000",
             isMember: false,
+            token:"",
         }
     },
     methods:{
         setFavorite: function(){
             console.log("set Favorite~~~")
             //var setFavoriteURL = "/back/users/favorite/add/"+this.$route.params.code
-            var token = ""
             axios.get('/back/users/get_user')
             .then((res)=>{
-                token = res.data.token;
-                console.log("get user data", res.data)
-                console.log("token", token)
+                this.token = res.data.token;
+                console.log("Get user :", res);
             })
             .catch((err)=>{
                 console.log(err)
             });
 
-            axios.post("/back/users/favorite/add/" + this.$route.params.code, {token:token})
+            axios.post("/back/users/favorite/add/" + this.$route.params.code, {token:this.token})
             .then((res)=>{
                 console.log("favorite add res: ", res)
             })

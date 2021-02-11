@@ -9,7 +9,7 @@
       </td>
       -->
       <td class="text-left">
-        <p class="title">{{row.title}}</p>
+        <p class="title">{{row.stock_name}}</p>
         <!--<p class="text-muted">{{row.description}}</p>-->
       </td>
       <td class="td-actions text-right">
@@ -25,49 +25,35 @@
   import BaseButton from '@/components/BaseButton';
   import BaseTable from '@/components/BaseTable';
   //import BaseCheckbox from '@/components/BaseCheckbox';
-
+  import axios from 'axios';
+  
   export default {
     components: {
       BaseButton,
       BaseTable,
       //BaseCheckbox
     },
-    props:['user'],
+    data(){
+      return {
+        favorites:[]
+      }
+    },
+    props:['token'],
     computed: {
       tableData() {
-        return [
-      {
-        "title": "Yaewon",
-        "description": "Dwuamish Head, Seattle, WA 8:47 AM",
-        "done": false
-      },
-      {
-        "title": "GDPR Compliance",
-        "description": "The GDPR is a regulation that requires businesses to protect the personal data and privacy of Europe citizens for transactions that occur within EU member states.",
-        "done": true
-      },
-      {
-        "title": "Solve the issues",
-        "description": "Fifty percent of all respondents said they would be more likely to shop at a company",
-        "done": false
-      },
-      {
-        "title": "Release v2.0.0",
-        "description": "Ra Ave SW, Seattle, WA 98116, SUA 11:19 AM",
-        "done": false
-      },
-      {
-        "title": "Export the processed files",
-        "description": "The report also shows that consumers will not easily forgive a company once a breach exposing their personal data occurs.",
-        "done": false
-      },
-      {
-        "title": "Arival at export process",
-        "description": "Capitol Hill, Seattle, WA 12:34 AM",
-        "done": false
+        return this.favorites
       }
-    ]
-      }
+    },
+    created:function(){
+      
+      axios.post("/back/users/favorites",{token:this.token})
+        .then((res)=>{
+          console.log(res)
+          this.favorites=res.data;
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
     }
   }
 </script>
