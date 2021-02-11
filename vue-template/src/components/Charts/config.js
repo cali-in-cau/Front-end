@@ -158,8 +158,9 @@ export let greenChartOptions = {
         zeroLineColor: "transparent",
       },
       ticks: {
-        suggestedMin: 50000,
-        suggestedMax: 125000,
+        stepSize: 100,
+        suggestedMin: 200,
+        suggestedMax: 100,
         padding: 20,
         fontColor: "#9e9e9e"
       }
