@@ -13,7 +13,7 @@
         <!--<p class="text-muted">{{row.description}}</p>-->
       </td>
       <td class="td-actions text-right">
-        <base-button type="link" artia-label="edit button">
+        <base-button type="link" artia-label="edit button" @click="deleteFav(row.stock_code)" >
           <i class="tim-icons icon-simple-remove"></i>
         </base-button>
       </td>
@@ -39,6 +39,18 @@
       }
     },
     props:['token'],
+    methods:{
+	deleteFav:function(code){
+	    axios.post("/back/users/favorite/delete/"+code,{token:this.token})
+		.then((res)=>{
+		  this.favorites=res.data
+		})
+		.catch((err)=>{
+		  console.log(err);
+		});
+
+	}
+    },
     computed: {
       tableData() {
         return this.favorites
