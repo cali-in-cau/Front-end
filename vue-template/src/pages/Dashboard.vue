@@ -21,7 +21,7 @@
                 <h3 class="card-title">BOOKMARK</h3>
             </template>
             <div class="table-full-width table-responsive">
-              <task-list :token="token"></task-list>
+              <bookmark :token="token"></bookmark>
             </div>
           </card>
 
@@ -109,7 +109,7 @@ import {
 
 import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
-import TaskList from './Dashboard/TaskList'
+import Bookmark from './Dashboard/Bookmark'
 //import UserTable from './Dashboard/UserTable'
 import config from '@/config';
 
@@ -127,7 +127,7 @@ export default {
   components: {
     Card,
     LineChart,
-    TaskList,
+    Bookmark,
     SearchBar,
     StockChart,
     PatternSim,

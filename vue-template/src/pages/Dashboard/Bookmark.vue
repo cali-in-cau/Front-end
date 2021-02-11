@@ -40,14 +40,14 @@
     },
     props:['token'],
     methods:{
-	deleteFav:function(code){
-	    axios.post("/back/users/favorite/delete/"+code,{token:this.token})
-		.then((res)=>{
-		  this.favorites=res.data
-		})
-		.catch((err)=>{
-		  console.log(err);
-		});
+      deleteFav:function(code){
+          axios.post("/back/users/favorite/delete/"+code,{token:this.token})
+        .then((res)=>{
+          this.favorites=res.data
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
 
 	}
     },

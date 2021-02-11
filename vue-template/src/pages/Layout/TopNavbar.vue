@@ -26,11 +26,14 @@
       </button>
       <div class="collapse navbar-collapse show text-left" v-show="showMenu">
         <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
+
+          <!--
           <li class="search-bar input-group"  @click="searchModalVisible = true">
             <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i class="tim-icons icon-zoom-split"></i>
               <span class="d-lg-none d-md-block">Search</span>
             </button>
           </li>
+          
           <modal :show.sync="searchModalVisible"
                  class="modal-search"
                  id="searchModal"
@@ -38,6 +41,8 @@
                  :show-close="true">
             <input slot="header" v-model="searchQuery" type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
           </modal>
+          -->
+          <!--
           <drop-down>
             <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle nav-link">
               <div class="notification d-none d-lg-block d-xl-block"></div>
@@ -54,10 +59,11 @@
               <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Another one</a></li>
             </ul>
           </drop-down>
+          -->
           <drop-down>
                 <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                   <div class="photo">
-                    <img src="@/assets/img/anime3.png" alt="Profile Photo">
+                    <img src="@/assets/img/anime6.png" alt="Profile Photo">
                   </div>
                   <b class="caret d-none d-lg-block d-xl-block"></b>
                   <p class="d-lg-none">
@@ -80,7 +86,7 @@
 import axios from "axios";
 
 import DropDown from "@/components/Dropdown.vue";
-import Modal from "@/components/Modal.vue";
+//import Modal from "@/components/Modal.vue";
 /*
 import {
   SidebarPlugin
@@ -89,7 +95,7 @@ import {
   export default{
     components:{
       DropDown,
-      Modal,
+      //Modal,
       //SidebarPlugin
     },
     data() {
@@ -101,14 +107,14 @@ import {
     },
     methods:{
       logout(){
-	this.$gAuth.signOut()
-	axios.get('/back/users/logout')
-	.then((res)=>{
-		console.log(res);
-	})
-	.catch((err)=>{
-		console.log("logout catch", err);
-	});
+        this.$gAuth.signOut()
+        axios.get('/back/users/logout')
+        .then((res)=>{
+          console.log(res);
+        })
+        .catch((err)=>{
+          console.log("logout catch", err);
+        });
 
         console.log("log out!");
       },
