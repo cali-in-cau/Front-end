@@ -22,11 +22,8 @@
             </template>
             <div class="table-full-width table-responsive">
               
-              <bookmark :data="favorites" v-on:changeStock="changeStock($event)"></bookmark>
+              <bookmark v-if='showbookmark' :data="favorites" v-on:changeStock="changeStock($event)" v-on:deleteStock="deleteStock($event)" ></bookmark>
 
-              <!--
-              <bookmark :token="token" v-on:changeStock="changeStock($event)"></bookmark>
-              -->
             </div>
           </card>
 
@@ -115,7 +112,6 @@ import {
 import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
 import Bookmark from './Dashboard/Bookmark'
-//import UserTable from './Dashboard/UserTable'
 import config from '@/config';
 
 import SearchBar from '@/components/SearchBar';
@@ -136,13 +132,13 @@ export default {
     SearchBar,
     StockChart,
     PatternSim,
-    //UserTable
     BaseAlert
     //BaseButton
   },
   data(){
     return{
       // favorites
+      showbookmark:false,	
       favorites:[],
       //user token
       token:"",
@@ -220,8 +216,9 @@ export default {
 
     await axios.post("/back/users/favorites",{token:this.token})
         .then((res)=>{
-          console.log("favorites", res)
-        
+          console.log("favorites", res);
+	  this.favorites = res.data;
+          this.showbookmark = true; 
         })
         .catch((err)=>{
           console.log(err);
@@ -265,6 +262,15 @@ export default {
     },
     changeStock:function(code, name){
       console.log("changeStock methods,, change it later in Dashboard.vue", code, name);
+    },
+    deleteStock:function(code){
+	axios.post("/back/users/favorite/delete/"+code,{token:this.token})
+        .then((res)=>{
+          this.favorites=res.data
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
     }
   },
   mounted(){

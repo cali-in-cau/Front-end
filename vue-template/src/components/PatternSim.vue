@@ -44,7 +44,6 @@
 
 
         </template>
-        <h2>{{stockName}}</h2>
           <bar-chart
                   class="chart-area"
                   chart-id="similar-chart"
@@ -112,11 +111,11 @@ export default {
             },
         } 
     },
-    props:['stockName'],
+    props:['stock'],
 
     created:function(){
         // yae- 여기서 pattern similarity 받아오기
-        console.log("created:", this.stockName)
+        console.log("pattern similarity props:", this.stock)
     }
 }
 </script>

@@ -45,7 +45,7 @@
 
         <div class="row">
             <div class="col-sm-4">
-                <pattern-sim :stockName="name"></pattern-sim>
+                <pattern-sim :stock="patternData"></pattern-sim>
             </div>
         </div>
 
@@ -82,8 +82,10 @@ export default {
             },
             //stockName: "",
             stockPrice: "82,000",
-            isMember: false,
+            isMember: false, 
             token:"",
+
+	    patternData:[],
         }
     },
     props:['name'],
@@ -111,7 +113,7 @@ export default {
         },
     },
     created: function(){
-        console.log("crated stockName", this.name);
+	this.patternData = [this.name, this.$route.params.code]
         // 어떻게보면 주식 그래프 용도
 
         //yae - 다음에 MSFT-> stockName으로 바꿔주기

@@ -29,32 +29,21 @@
 
   import BaseButton from '@/components/BaseButton';
   import BaseTable from '@/components/BaseTable';
-  //import BaseCheckbox from '@/components/BaseCheckbox';
-  //import axios from 'axios';
   
   export default {
     components: {
       BaseButton,
       BaseTable,
-      //BaseCheckbox
     },
     data(){
       return {
-        //favorites:[]
       }
     },
-    props:['favorites'],
+    props:['data'],
     methods:{
       
       deleteFav:function(code){
-          axios.post("/back/users/favorite/delete/"+code,{token:this.token})
-        .then((res)=>{
-          this.favorites=res.data
-        })
-        .catch((err)=>{
-          console.log(err);
-        });
-
+	this.$emit('deleteStock', code);
       },
       changeStock:function(code, name){
         this.$emit('changeStock', [code, name]);
@@ -62,22 +51,14 @@
     },
     computed: {
       tableData() {
-        return this.favorites
+        return this.data;
       }
     },
-    created:function(){
-      
-      /*
-      axios.post("/back/users/favorites",{token:this.token})
-        .then((res)=>{
-          console.log(res)
-          this.favorites=res.data;
-        })
-        .catch((err)=>{
-          console.log(err);
-        });
-        */
-    }
+    watch:{
+	data(newVal, oldVal){
+	    console.log('favorites changed: ', newVal, ' | was: ', oldVal)
+	}
+    },
   }
 </script>
 <style>
