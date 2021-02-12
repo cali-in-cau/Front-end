@@ -30,7 +30,7 @@
   import BaseButton from '@/components/BaseButton';
   import BaseTable from '@/components/BaseTable';
   //import BaseCheckbox from '@/components/BaseCheckbox';
-  import axios from 'axios';
+  //import axios from 'axios';
   
   export default {
     components: {
@@ -40,11 +40,12 @@
     },
     data(){
       return {
-        favorites:[]
+        //favorites:[]
       }
     },
-    props:['token'],
+    props:['favorites'],
     methods:{
+      
       deleteFav:function(code){
           axios.post("/back/users/favorite/delete/"+code,{token:this.token})
         .then((res)=>{
@@ -66,6 +67,7 @@
     },
     created:function(){
       
+      /*
       axios.post("/back/users/favorites",{token:this.token})
         .then((res)=>{
           console.log(res)
@@ -74,6 +76,7 @@
         .catch((err)=>{
           console.log(err);
         });
+        */
     }
   }
 </script>

@@ -21,7 +21,12 @@
                 <h3 class="card-title">BOOKMARK</h3>
             </template>
             <div class="table-full-width table-responsive">
+              
+              <bookmark :data="favorites" v-on:changeStock="changeStock($event)"></bookmark>
+
+              <!--
               <bookmark :token="token" v-on:changeStock="changeStock($event)"></bookmark>
+              -->
             </div>
           </card>
 
@@ -137,6 +142,8 @@ export default {
   },
   data(){
     return{
+      // favorites
+      favorites:[],
       //user token
       token:"",
       //user Info
@@ -199,8 +206,9 @@ export default {
       return this.$rtl.isRTL;
     }
   },
-  created: function(){
-    axios.get('/back/users/get_user')
+  created: async function(){
+
+    await axios.get('/back/users/get_user')
             .then((res)=>{
                 this.token = res.data.token;
                 console.log("get user data", res.data)
@@ -209,6 +217,16 @@ export default {
             .catch((err)=>{
                 console.log(err)
             });
+
+    await axios.post("/back/users/favorites",{token:this.token})
+        .then((res)=>{
+          console.log("favorites", res)
+        
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+
   },
   methods:{
     initBigChart(index) {
