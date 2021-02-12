@@ -21,7 +21,7 @@
                 <h3 class="card-title">BOOKMARK</h3>
             </template>
             <div class="table-full-width table-responsive">
-              <bookmark :token="token"></bookmark>
+              <bookmark :token="token" v-on:test="changeStock"></bookmark>
             </div>
           </card>
 
@@ -244,6 +244,9 @@ export default {
         type: this.type[color],
         timeout: 0
       });
+    },
+    changeStock:function(){
+      alert("Received!");
     }
   },
   mounted(){
