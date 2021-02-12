@@ -21,7 +21,7 @@
                 <h3 class="card-title">BOOKMARK</h3>
             </template>
             <div class="table-full-width table-responsive">
-              <bookmark :token="token" v-on:test="changeStock"></bookmark>
+              <bookmark :token="token" v-on:changeStock="changeStock($event)"></bookmark>
             </div>
           </card>
 
@@ -245,8 +245,8 @@ export default {
         timeout: 0
       });
     },
-    changeStock:function(){
-      alert("Received!");
+    changeStock:function(code, name){
+      console.log("changeStock methods,, change it later in Dashboard.vue", code, name);
     }
   },
   mounted(){
