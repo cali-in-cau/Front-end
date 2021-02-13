@@ -148,6 +148,10 @@ export default {
       token:"",
       //user Info
       info:"accept",
+      //main stock
+      showStockChart:false,
+      mainStock:[],
+
       //Stock Info
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,

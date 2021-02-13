@@ -189,6 +189,9 @@ export default {
       this.i18n.locale = 'en';
       this.$rtl.disableRTL();
     }
+  },
+  created:function(){
+      console.log("getStockData", this.data);
   }
 }
 </script>
