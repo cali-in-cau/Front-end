@@ -55,7 +55,7 @@
       <div class="col-lg-4">
         <card
         type="chart"
-        cardCol
+        cardCold
         >
         <template slot="header">
           <h3 class="card-title"><i class="tim-icons icon-chart-bar-32 text-primary "></i>Stock Info</h3>
