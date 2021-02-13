@@ -111,11 +111,15 @@ export default {
             },
         } 
     },
-    props:['stock'],
-
+    props:['data'],
+    watch:{
+	data(newVal,oldVal){
+		console.log("patternSim changed:", oldVal,"->", newVal);
+	}
+    },
     created:function(){
         // yae- 여기서 pattern similarity 받아오기
-        console.log("pattern similarity props:", this.stock)
+        console.log("pattern similarity props:", this.data)
     }
 }
 </script>

@@ -11,7 +11,7 @@
                     </template>
                     <template>
                         <!-- 여기도 검색한 회사명 넣어줘야 함 -->
-                        <h2 class="card-title">{{corName}}</h2>
+                        <h2 class="card-title">{{data.stock_name}}</h2>
                         
                     </template>
                 </div>
@@ -126,6 +126,7 @@ export default {
             
         }
     },
+  props:['data'],
   computed:{
     enableRTL() {
       return this.$route.query.enableRTL;
@@ -174,6 +175,14 @@ export default {
       this.$rtl.enableRTL();
     }
     this.initBigChart(0);
+  },
+  created:function(){
+	console.log("stockChart created : ", this.data);
+  },
+  watch:{
+	data(newVal, oldVal){
+		console.log("stock Chart stock changed:", oldVal,"->", newVal);
+	}
   },
   beforeDestroy() {
     if (this.$rtl.isRTL) {
