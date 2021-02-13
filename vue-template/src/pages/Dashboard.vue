@@ -150,7 +150,6 @@ export default {
       info:"accept",
       //main stock
       showStockChart:false,
-      mainStock:[],
 
       //Stock Info
       greenLineChart: {

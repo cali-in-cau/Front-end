@@ -189,9 +189,6 @@ export default {
       this.$rtl.disableRTL();
     }
   },
-  created:function(){
-      console.log("getStockData", this.data);
-  }
 }
 </script>
 <style>
