@@ -12,7 +12,6 @@
                     <template>
                         <!-- 여기도 검색한 회사명 넣어줘야 함 -->
                         <h2 class="card-title">{{data.stock_name}}</h2>
-                        
                     </template>
                 </div>
                 <!-- Buttons(Group) -->
@@ -110,7 +109,7 @@ export default {
                 allDate:[
                     stockData.data.date.slice(-10,),
                     stockData.data.date.slice(-50,),
-                    stockData.data.date.slice(-100,),
+                    stockData.data.date.slice(),
                 ],
 
                 activeIndex: 0,
