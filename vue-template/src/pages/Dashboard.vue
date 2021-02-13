@@ -217,7 +217,7 @@ export default {
     await axios.post("/back/users/favorites",{token:this.token})
         .then((res)=>{
           console.log("favorites", res);
-	  this.favorites = res.data;
+	        this.favorites = res.data;
           this.showbookmark = true; 
         })
         .catch((err)=>{

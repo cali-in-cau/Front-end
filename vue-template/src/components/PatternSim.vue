@@ -6,16 +6,16 @@
         >
         <template slot="header">
 	    <div class="row">
-		    <div class="col-sm-10">
+		    <div class="col-sm-9">
 			<template>
 			    <h5 class="card-category">Real Time Analysis</h5>
 			</template>
 			<h3 class="card-title">Pattern Similarity</h3>
 		    </div>	
 		
-		    <div class="col-sm-2">
+		    <div class="col-sm-3">
 
-			<button class="card-title btn-rotate btn btn-link btn-icon" type="primary" @click="modals = true">
+			<button class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="modals = true">
 			    <i class="tim-icons icon-zoom-split"></i>
 			</button>  
 		    </div>

@@ -11,13 +11,13 @@
                 <card>
                     <template slot="header">
                     <div class="row">
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                             <h5 class="card-category">Brief Info</h5>
                             <h3 class="card-title">{{name}}</h3>
                         </div>
                         	
-                        <div class="col-sm-2">
-                            <button v-if="isMember" class="card-title btn-rotate btn btn-link btn-icon" type="primary" @click="setFavorite">
+                        <div class="col-sm-3">
+                            <button v-if="isMember" class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="setFavorite">
                                 <i class="tim-icons icon-simple-add"></i>
                             </button>  
                         </div>
