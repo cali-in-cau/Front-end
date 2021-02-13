@@ -2,20 +2,36 @@
     <card>
         <h5 class="card-category">Search Bar</h5>
             <div class="card-title">
-                <input id="test" class="form-control" v-model="stockName" v-on:keyup.enter="searchStock" @click="showSearch=false" placeholder="검색어를 입력해주세요">
+                <input id="test" class="form-control" v-model="stockName" v-on:keyup.enter="searchStock(stockName)" @click="clickSearch" placeholder="검색어를 입력해주세요">
             </div>
             <div class="card-body" v-if="showSearch">
                 <strong>Search result</strong>
                 <div class="table-responsive">
                     <table class="table tablesorter text-left">
-                        <tbody>          
-                            <tr v-for="(item, index) in stockList" :key="index" @click="clickStock(item)">
+                        <tbody>     
+                            <tr v-for="(item, index) in paginatedData" :key="index">
                                 <slot :row="item">
-                                    <td><a :href="`/stock/${item}`" @click="clickStock(item)" ><p>{{item}}</p></a></td>
+                                    <td>
+                                        <router-link v-if="isMember" :to="{name: 'Stock Search', params: { code: item.code, name:item.name }}" ><p>{{item.name}}</p></router-link>
+                                        <router-link v-else :to="{name: 'Stock Search ', params: { code: item.code, name:item.name }}" ><p>{{item.name}}</p></router-link>
+                                    </td>  
                                 </slot>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+
+                        <base-button :disabled="pageNum==0" type="success" class="page-item btn-round" aria-label="Previous" @click="prevPage">
+                            <i class="tim-icons icon-double-left" aria-hidden="true"></i>
+                        </base-button>
+
+                        <span class="page-count">  {{ pageNum + 1 }} / {{ pageCount }} page  </span>
+
+                        <base-button  :disabled="pageNum >= (pageCount-1)" class="page-item btn-round" type="success" aria-label="Next" @click="nextPage">
+                            <i class="tim-icons icon-double-right" aria-hidden="true"></i>
+                        </base-button>
+                        
+                    </div>
                 </div>
             </div>    
     </card>
@@ -27,10 +43,13 @@ import {
   Card
 } from "@/components/index";
 
-//import axios from "axios";
+import axios from "axios";
+
+import BaseButton from "@/components/BaseButton";
 
 export default {
     components:{
+        BaseButton,
         Card,
     },
     data(){
@@ -38,38 +57,60 @@ export default {
             showSearch:false,
             stockList:[
                 "삼성",
-                "삼성전자"
+                "삼성 전자"
             ],
             stockName:"",
+            isMember:true,
+
+            pageSize:5,
+            pageNum:0,
+
         }
     },
+    props:['info'],
     methods:{
         //Search 연동 - yae
-        searchStock(){
-            // 이제 이걸 백으로 넘겨서 데이터 받으면 된다.
-            console.log(this.stockName)
-            if(this.stockList.indexOf(this.stockName.replace(/\s+/g, '')) >-1){
-                this.showSearch = true;
-            }else{
-                this.showSearch = false;
-            }
-            /* axios 이용 post 요청 */
-            /*
-            axios.post('getlist_URL', {word:this.StockName})
+        searchStock(stockName){
+            axios.get(`/back/stocks/search/${stockName}`)
                 .then((res)=>{
                     //res data 여기에 넣어주기
-                    this.stockList = []
+                	this.stockList = res.data.result;
+                	this.showSearch = true;
                 })
                 .catch((err)=>{
                     console.log(err);
                 })
-                */
+                
         },
-        // 클릭 시 해당 주식 정보 띄워주는 화면으로 갈 수 있게끔!
-        clickStock(item){
-            console.log(item, " push ");
-            this.$route.push({name:"Stock Search", params:{"id":item}});
+        nextPage () {
+            this.pageNum += 1;
         },
+        prevPage () {
+            this.pageNum -= 1;
+        },
+        clickSearch(){
+            this.showSearch=false;
+            this.pageNum=0;
+        }
+    },
+    computed:{
+        pageCount(){
+            let dataLength = this.stockList.length,
+                page = Math.floor((dataLength - 1) / this.pageSize) + 1;
+
+            return page
+        },
+        paginatedData () {
+            const start = this.pageNum * this.pageSize,
+                    end = start + this.pageSize;
+            return this.stockList.slice(start, end);
+        }
+    },
+    created: function(){
+        if(this.info=="non"){
+            this.isMember=false
+        }
+
     }
     
 }

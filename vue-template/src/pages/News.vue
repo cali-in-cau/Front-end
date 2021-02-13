@@ -29,6 +29,8 @@ import {
 import UserTable from './Dashboard/UserTable'
 //import config from '@/config';
 
+import axios from 'axios';
+
 export default {
   components: {
     Card,
@@ -49,18 +51,35 @@ export default {
   methods:{
   },
   mounted(){
+    /*
     this.i18n = this.$i18n;
     if (this.enableRTL) {
       this.i18n.locale = 'ar';
       this.$rtl.enableRTL();
     }
     this.initBigChart(0);
+    */
   },
   beforeDestroy() {
+    /*
     if (this.$rtl.isRTL) {
       this.i18n.locale = 'en';
       this.$rtl.disableRTL();
     }
+    */
+  },
+  created:function(){
+    
+    console.log("news enter created");
+    
+    axios.get('/back/news/')
+    .then((res)=>{
+      console.log("Enter news", res);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+    
   }
 }
 </script>

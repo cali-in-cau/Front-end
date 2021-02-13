@@ -10,8 +10,19 @@
             <div class="col-sm-4">
                 <card>
                     <template slot="header">
-                        <h5 class="card-category">Brief Info</h5>
-                        <h3 class="card-title">{{stockName}}</h3>
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h5 class="card-category">Brief Info</h5>
+                            <h3 class="card-title">{{name}}</h3>
+                        </div>
+                        	
+                        <div class="col-sm-3">
+                            <button v-if="isMember" class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="setFavorite">
+                                <i class="tim-icons icon-simple-add"></i>
+                            </button>  
+                        </div>
+                    </div>
+                    
                         <h2 class>{{stockPrice}}원</h2>
                     </template>
                 </card>
@@ -34,7 +45,7 @@
 
         <div class="row">
             <div class="col-sm-4">
-                <pattern-sim :stockName="stockName"></pattern-sim>
+                <pattern-sim :stock="patternData"></pattern-sim>
             </div>
         </div>
 
@@ -52,7 +63,8 @@ import BaseTable from "@/components/BaseTable";
 import PatternSim from '@/components/PatternSim'
 
 
-//import axios from "axios";
+import axios from "axios";
+
 
 const tableColumns = ["전일", "고가", "시가", "저가"];
 
@@ -70,15 +82,41 @@ export default {
                 columns: [...tableColumns],
                 data: []
             },
-            stockName: "",
+            //stockName: "",
             stockPrice: "82,000",
+            isMember: false, 
+            token:"",
+
+	    patternData:[],
         }
     },
-    created: function(){
+    props:['name'],
+    methods:{
+        setFavorite: function(){
+            console.log("set Favorite~~~")
+            //var setFavoriteURL = "/back/users/favorite/add/"+this.$route.params.code
+            axios.get('/back/users/get_user')
+            .then((res)=>{
+                this.token = res.data.token;
+                console.log("Get user :", res);
+            })
+            .catch((err)=>{
+                console.log(err)
+            });
 
+            axios.post("/back/users/favorite/add/" + this.$route.params.code, {token:this.token})
+            .then((res)=>{
+                console.log("favorite add res: ", res)
+            })
+            .catch((err)=>{
+                console.log(err);
+            });
+
+        },
+    },
+    created: function(){
+	this.patternData = [this.name, this.$route.params.code]
         // 어떻게보면 주식 그래프 용도
-        console.log("Stock Name:", this.$route.params.data)
-        this.stockName = this.$route.params.data;
 
         //yae - 다음에 MSFT-> stockName으로 바꿔주기
         /*
@@ -102,6 +140,12 @@ export default {
         }];
 
         this.details.data = exData;
+        
+        var currentPath = this.$router.currentRoute.path;
+        console.log("hey",this.$router.currentRoute.path)
+        if(currentPath.includes("accept")){
+            this.isMember = true;
+        }
     },
 
     

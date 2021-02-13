@@ -6,7 +6,7 @@
         <p class="category">Handcrafted by our friends from <a href="https://nucleoapp.com/?ref=1712">NucleoApp</a></p>
       </template>
       <div class="row">
-        <div v-for="icon in icons" class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-xs-6 col-xs-6">
+        <div v-for="(icon, index) in icons" :key="index" class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-xs-6 col-xs-6">
           <div class="font-icon-detail">
             <i class="tim-icons" :class="[`${icon}`]"></i>
             <p>{{ icon }}</p>

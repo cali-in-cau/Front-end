@@ -5,11 +5,23 @@
         cardCol
         >
         <template slot="header">
-            <h3 class="card-title d-inline">Pattern Similarity</h3>
-            
-            <button class="card-title btn-rotate btn btn-link btn-icon" type="primary" @click="modals = true">
-            <i class="tim-icons icon-zoom-split"></i>
-            </button>   
+	    <div class="row">
+		    <div class="col-sm-9">
+			<template>
+			    <h5 class="card-category">Real Time Analysis</h5>
+			</template>
+			<h3 class="card-title">Pattern Similarity</h3>
+		    </div>	
+		
+		    <div class="col-sm-3">
+
+			<button class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="modals = true">
+			    <i class="tim-icons icon-zoom-split"></i>
+			</button>  
+		    </div>
+            </div>
+
+             
 
             <modal :show.sync="modals"
                     class="modal-search"
@@ -32,7 +44,6 @@
 
 
         </template>
-        <h2>{{stockName}}</h2>
           <bar-chart
                   class="chart-area"
                   chart-id="similar-chart"
@@ -100,11 +111,11 @@ export default {
             },
         } 
     },
-    props:['stockName'],
+    props:['stock'],
 
     created:function(){
         // yae- 여기서 pattern similarity 받아오기
-        console.log("created:", this.stockName)
+        console.log("pattern similarity props:", this.stock)
     }
 }
 </script>

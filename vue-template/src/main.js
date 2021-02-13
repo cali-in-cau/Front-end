@@ -33,6 +33,8 @@ import Notify from "@/components/NotificationPlugin";
 import i18n from "./i18n"
 import SideBar from "@/components/SidebarPlugin";
 
+import GAuth from 'vue-google-oauth2';
+import VueCookies from 'vue-cookies';
 
 Vue.config.productionTip = false;
 
@@ -55,6 +57,11 @@ Vue.use(GlobalDirectives);
 Vue.use(RTLPlugin);
 Vue.use(SideBar);
 Vue.use(Notify);
+
+Vue.use(GAuth, {clientId:'619508137229-n76v4vir6erbv8nmpsm7anij5cralbh7.apps.googleusercontent.com', scope:'profile email https://www.googleapis.com/auth/plus.login'});
+Vue.use(VueCookies);
+
+Vue.$cookies.config('7d');
 
 new Vue({
   router,

@@ -4,7 +4,7 @@
     <!-- yae SearchBar component -->
     <div class="row"> 
       <div class="col-sm-12">
-        <search-bar></search-bar>
+        <search-bar :info="info"></search-bar>
       </div>
     </div>
 
@@ -18,28 +18,12 @@
         <div class="col-4">
           <card type="tasks">
             <template slot="header">
-              <template v-if="!isRTL">
-                <h6 class="title d-inline">Bookmark</h6>
-              </template>
-              <template v-else>
-                <h6 class="title d-inline">الشحنات</h6>
-              </template>
-              <template v-if="!isRTL">
-                <p class="card-category d-inline">Username</p>
-              </template>
-              <drop-down tag="div" :class="isRTL ? 'float-left' : ''">
-                <button aria-label="Settings menu" data-toggle="dropdown" class="dropdown-toggle btn-rotate btn btn-link btn-icon" :class="isRTL ? 'pl-5' : ''">
-                  <i class="tim-icons icon-settings-gear-63"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <a href="#pablo" class="dropdown-item">Action</a>
-                  <a href="#pablo" class="dropdown-item">Another Action</a>
-                  <a href="#pablo" class="dropdown-item">Something else</a>
-                </ul>
-              </drop-down>
+                <h3 class="card-title">BOOKMARK</h3>
             </template>
             <div class="table-full-width table-responsive">
-              <task-list></task-list>
+              
+              <bookmark v-if='showbookmark' :data="favorites" v-on:changeStock="changeStock($event)" v-on:deleteStock="deleteStock($event)" ></bookmark>
+
             </div>
           </card>
 
@@ -127,8 +111,7 @@ import {
 
 import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
-import TaskList from './Dashboard/TaskList'
-//import UserTable from './Dashboard/UserTable'
+import Bookmark from './Dashboard/Bookmark'
 import config from '@/config';
 
 import SearchBar from '@/components/SearchBar';
@@ -139,20 +122,28 @@ import BaseAlert from '@/components/BaseAlert';
 //import BaseButton from '@/components/BaseButton';
 import NotificationTemplate from './Notifications/NotificationTemplate';
 
+import axios from "axios";
+
 export default {
   components: {
     Card,
     LineChart,
-    TaskList,
+    Bookmark,
     SearchBar,
     StockChart,
     PatternSim,
-    //UserTable
     BaseAlert
     //BaseButton
   },
   data(){
     return{
+      // favorites
+      showbookmark:false,	
+      favorites:[],
+      //user token
+      token:"",
+      //user Info
+      info:"accept",
       //Stock Info
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
@@ -211,6 +202,29 @@ export default {
       return this.$rtl.isRTL;
     }
   },
+  created: async function(){
+
+    await axios.get('/back/users/get_user')
+            .then((res)=>{
+                this.token = res.data.token;
+                console.log("get user data", res.data)
+                console.log("token", this.token)
+            })
+            .catch((err)=>{
+                console.log(err)
+            });
+
+    await axios.post("/back/users/favorites",{token:this.token})
+        .then((res)=>{
+          console.log("favorites", res);
+	        this.favorites = res.data;
+          this.showbookmark = true; 
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+
+  },
   methods:{
     initBigChart(index) {
       let chartData = {
@@ -245,6 +259,18 @@ export default {
         type: this.type[color],
         timeout: 0
       });
+    },
+    changeStock:function(code, name){
+      console.log("changeStock methods,, change it later in Dashboard.vue", code, name);
+    },
+    deleteStock:function(code){
+	axios.post("/back/users/favorite/delete/"+code,{token:this.token})
+        .then((res)=>{
+          this.favorites=res.data
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
     }
   },
   mounted(){
