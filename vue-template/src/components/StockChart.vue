@@ -10,7 +10,7 @@
                         <h5 class="card-category">Real Time Stock Graph</h5>
                     </template>
                     <template>
-                        <!-- 여기도 검색한 회사명 넣어줘야 함 -->
+                        <!-- 검색한 회사명 -->
                         <h2 class="card-title">{{corName}}</h2>
                         
                     </template>
@@ -110,7 +110,7 @@ export default {
                 allDate:[
                     stockData.data.date.slice(-10,),
                     stockData.data.date.slice(-50,),
-                    stockData.data.date.slice(-100,),
+                    stockData.data.date.slice(),
                 ],
 
                 activeIndex: 0,
