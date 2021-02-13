@@ -51,11 +51,10 @@ import SearchBar from '@/components/SearchBar';
 import BaseTable from "@/components/BaseTable";
 import PatternSim from '@/components/PatternSim'
 
-//import stockData from '../components/dumpSS.json';
 
 //import axios from "axios";
 
-const tableColumns = ["시가", "고가", "저가", "종가"];
+const tableColumns = ["전일", "고가", "시가", "저가"];
 
 export default {
     components:{
@@ -99,13 +98,12 @@ export default {
             고가 : "85,000",
             저가 : "84,500",
             종가 : "82,000"
+
         }];
 
         this.details.data = exData;
     },
-    //methods:{
-    //    exData : stockData.data.value[0]
-    //}
+
     
 }
 </script>
