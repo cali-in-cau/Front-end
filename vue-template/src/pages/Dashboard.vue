@@ -11,7 +11,7 @@
     <div class="row">
     <!-- Annie Stock Graph -->
       <div class="col-8">
-        <stock-chart></stock-chart>
+        <stock-chart v-if="showMainStock" :data="mainStock"></stock-chart>
       </div>
 
         <!-- Annie bookmark -->
@@ -48,7 +48,7 @@
 
       <!-- yae 유사도 그래프, :stockName="stockName" 요런식으로 값을 넣어줘야함 나중에-->
       <div class="col-lg-4">
-         <pattern-sim></pattern-sim>
+         <pattern-sim v-if="showPattern" :data="mainStock"></pattern-sim>
       </div>
 
       <!-- Stock Info -->
@@ -137,6 +137,10 @@ export default {
   },
   data(){
     return{
+      //mainStock
+      mainStock:[],
+      showMainStock:false,
+      showPattern:false,
       // favorites
       showbookmark:false,	
       favorites:[],
@@ -144,6 +148,10 @@ export default {
       token:"",
       //user Info
       info:"accept",
+      //main stock
+      showStockChart:false,
+      mainStock:[],
+
       //Stock Info
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
@@ -207,8 +215,6 @@ export default {
     await axios.get('/back/users/get_user')
             .then((res)=>{
                 this.token = res.data.token;
-                console.log("get user data", res.data)
-                console.log("token", this.token)
             })
             .catch((err)=>{
                 console.log(err)
@@ -218,7 +224,10 @@ export default {
         .then((res)=>{
           console.log("favorites", res);
 	        this.favorites = res.data;
-          this.showbookmark = true; 
+		this.mainStock = res.data[0];
+		this.showMainStock = true;
+          	this.showbookmark = true; 
+          	this.showPattern = true; 
         })
         .catch((err)=>{
           console.log(err);
@@ -267,6 +276,7 @@ export default {
 	axios.post("/back/users/favorite/delete/"+code,{token:this.token})
         .then((res)=>{
           this.favorites=res.data
+	  this.mainStock=res.data[0];
         })
         .catch((err)=>{
           console.log(err);

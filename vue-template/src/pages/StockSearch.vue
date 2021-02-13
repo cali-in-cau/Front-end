@@ -45,7 +45,7 @@
 
         <div class="row">
             <div class="col-sm-4">
-                <pattern-sim :stock="patternData"></pattern-sim>
+                <pattern-sim :data="patternData"></pattern-sim>
             </div>
         </div>
 

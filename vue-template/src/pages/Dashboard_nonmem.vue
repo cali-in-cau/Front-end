@@ -11,7 +11,7 @@
     <div class="row">
       <!-- Annie Stock Graph -->
       <div class="col-8">
-        <stock-chart></stock-chart>
+        <stock-chart :data="mainStock"></stock-chart>
       </div>
 
       <!-- Annie News -->
@@ -89,6 +89,7 @@ export default {
   },
   data(){
     return{
+      mainStock:{stock_code:"AAPL", stock_name:"APPLE INC"},
       //user Info
       info:"non",
       //Stock Info
