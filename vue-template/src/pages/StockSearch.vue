@@ -51,6 +51,7 @@ import SearchBar from '@/components/SearchBar';
 import BaseTable from "@/components/BaseTable";
 import PatternSim from '@/components/PatternSim'
 
+
 //import axios from "axios";
 
 const tableColumns = ["전일", "고가", "시가", "저가"];
@@ -91,16 +92,18 @@ export default {
         */
        
         // 어떻게 이렇게 잘 파싱해서 가져와서 넣으면 된다.
+
         var exData =[{
-            전일 : "83,700",
-            고가: "85,000",
-            시가: "84,500",
-            저가: "82,000"
+            시가 : "83,700",
+            고가 : "85,000",
+            저가 : "84,500",
+            종가 : "82,000"
+
         }];
 
         this.details.data = exData;
     },
-    
+
     
 }
 </script>
