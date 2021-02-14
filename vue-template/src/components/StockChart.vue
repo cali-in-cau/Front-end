@@ -11,7 +11,8 @@
                     </template>
                     <template>
                         <!-- 여기도 검색한 회사명 넣어줘야 함 -->
-                        <h2 class="card-title">{{data.stock_name}}</h2>
+                        <h2 v-if="showChart" class="card-title">{{data.stock_name}}</h2>
+                        <h2 v-else class="card-title">Add a Bookmark!</h2>
                     </template>
                 </div>
                 <!-- Buttons(Group) -->
@@ -84,7 +85,7 @@ export default {
     },
     data(){
         return{
-            corName : "",
+	    showChart:false,
             //고정값
             bigLineChartCategories:[
                 "1Day",
@@ -176,11 +177,25 @@ export default {
     this.initBigChart(0);
   },
   created:function(){
+	if(this.data===undefined){
+		this.showChart = false;	
+		// 여기는 강제로 0값데이터 집어넣기
+	}else{
+		this.showChart = true;
+	}
 	console.log("stockChart created : ", this.data);
   },
   watch:{
 	data(newVal, oldVal){
 		console.log("stock Chart stock changed:", oldVal,"->", newVal);
+		
+		if(this.data===undefined){
+			this.showChart = false;	
+			// 여기는 강제로 0값데이터 집어넣기
+		}else{
+			this.showChart = true;
+		}
+		
 	}
   },
   beforeDestroy() {
