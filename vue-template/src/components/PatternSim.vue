@@ -114,37 +114,35 @@ export default {
     },
     props:['data'],
     watch:{
-	async data(newVal,oldVal){
-		
-		this.showChart=false;
-		console.log("patternSim changed:", oldVal,"->", newVal);
-		
-		await this.renderChart();	
-		
-		this.showChart=true;
-	},
+        async data(newVal,oldVal){
+            
+            this.showChart=false;
+            console.log("patternSim changed:", oldVal,"->", newVal);
+            
+            await this.renderChart();	
+            this.showChart=true;
+        },
 
     },
     methods:{
-	renderChart:function(){
+	    renderChart:function(){
 			if(this.data===undefined){
 			// 0 값
 			this.similarity.chartData.labels=["none", "none", "none"];
 			this.similarity.chartData.datasets[0].data=[0, 0, 0];
-			
-		}else{
-			// ML 결과 받아오기 , axios
+                
+            }else{
+                // ML 결과 받아오기 , axios
 
-			this.similarity.chartData.labels=["Pattern1", "pattern2", "pattern3"];
-			this.similarity.chartData.datasets[0].data=[70,40, 50];
-		}
-
-	}
+                this.similarity.chartData.labels=["Pattern1", "pattern2", "pattern3"];
+                this.similarity.chartData.datasets[0].data=[70,40, 50];
+            }
+	    }
 
     },
     created:async function(){
-	await this.renderChart();	
-	this.showChart=true;
+        await this.renderChart();	
+        this.showChart=true;
     }
 }
 </script>
