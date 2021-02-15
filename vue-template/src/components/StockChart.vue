@@ -190,7 +190,7 @@ export default {
     this.initBigChart(0);
   },
   created:async function(){
-    await renderChart();
+    await this.renderChart();
     this.showChart=true;
   },
   watch:{
