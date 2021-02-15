@@ -57,6 +57,38 @@
       </card>
     </div>     
   </div>
+
+
+  <div class="row">
+    <div class="col-md-5 mr-auto">
+        <card class="card-chart card-chart-pie">
+          <h5 slot="header" class="card-category text-left">
+            Multiple Pie Chart
+          </h5>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="chart-area">
+                <pie-chart
+                  :chart-data="pieChart2.chartData"
+                  :extra-options="pieChart2.extraOptions"
+                  :height="120"
+                >
+                </pie-chart>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <h4 class="card-title text-left">
+                <i class="tim-icons  icon-tag text-warning"></i> 130,000
+              </h4>
+              <p class="category text-left">Feedback from 20.000 users</p>
+            </div>
+          </div>
+        </card>
+      </div>
+  </div>
+
   </div>
 </template>
 
@@ -75,6 +107,7 @@ import config from '@/config';
 
 import SearchBar from '@/components/SearchBar';
 import StockChart from '@/components/StockChart';
+import PieChart from "@/components/Charts/PieChart";
 //import PatternSim from '@/components/PatternSim';
 
 export default {
@@ -84,6 +117,7 @@ export default {
     //TaskList,
     SearchBar,
     StockChart,
+    PieChart
     //PatternSim
     //UserTable
   },
@@ -135,6 +169,9 @@ export default {
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.3, 0],
       },
+
+  
+
     }
   },
   computed:{

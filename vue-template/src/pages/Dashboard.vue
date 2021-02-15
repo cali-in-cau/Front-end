@@ -31,20 +31,6 @@
     </div>
     <div class="row">
 
-    <!--
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card
-        type="chart"
-        cardCol
-        >
-        <template slot="header">
-          <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
-          <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i> 763,215</h3>
-        </template>
-          
-        </card>
-      </div>
-      -->
 
       <!-- yae 유사도 그래프, :stockName="stockName" 요런식으로 값을 넣어줘야함 나중에-->
       <div class="col-lg-4">
@@ -58,6 +44,7 @@
         cardCold
         >
         <template slot="header">
+          <h5 class="card-category">Real Time Information</h5>
           <h3 class="card-title"><i class="tim-icons icon-chart-bar-32 text-primary "></i>Stock Info</h3>
         </template>
           <line-chart

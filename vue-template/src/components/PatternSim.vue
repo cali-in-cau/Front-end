@@ -15,14 +15,13 @@
 		
 		    <div class="col-sm-3">
 
-			<button class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="modals = true">
+			<button v-if="data !== undefined" class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="modals = true">
 			    <i class="tim-icons icon-zoom-split"></i>
 			</button>  
 		    </div>
             </div>
 
-             
-
+    
             <modal :show.sync="modals"
                     class="modal-search"
                     id="searchModal"
@@ -44,6 +43,7 @@
 
 
         </template>
+        <!--
           <bar-chart v-if="showChart"
                   class="chart-area"
                   chart-id="similar-chart"
@@ -51,6 +51,22 @@
                   :gradient-stops="similarity.gradientStops"
                   :extra-options="similarity.extraOptions">
           </bar-chart>
+          -->
+            <pie-chart
+                  :chart-data="pieChart.chartData"
+                  :extra-options="pieChart.extraOptions"
+                  :height="120"
+                >
+            </pie-chart>
+            
+            <div class="card-footer">
+                    <div v-for="(label, index) in pieChart.chartData.labels" :key="index">
+                    <div v-for="(data, index) in pieChart.chartData.datasets[0].data" :key="index">
+                        <h4 v-if="label != 'none'" style="margin:0;">{{index+1}}. {{label}} / {{data}}%</h4>
+                        <h2 v-else>No data</h2>
+                    </div>
+                    </div>
+            </div>
         </card>
 </template>
 
@@ -61,20 +77,24 @@ import {
   Card
 } from "@/components/index";
 import BarChart from '@/components/Charts/BarChart';
+import PieChart from "@/components/Charts/PieChart";
 import * as chartConfigs from '@/components/Charts/config';
 import config from '@/config';
 import Modal from "@/components/Modal";
+
 
 export default {
     components:{
         Card,
         BarChart,
+        PieChart,
         Modal
     },
     data(){
         return{
 	    showChart:false,
             modals: false,
+            /*
             // yae - 안에 내용 created() 에서 채워 넣기
             similarity: {
                 extraOptions: chartConfigs.barChartOptions,
@@ -93,6 +113,7 @@ export default {
                 gradientColors: config.colors.primaryGradient,
                 gradientStops: [1, 0.3, 0],
             },
+            */
             detailSimilarity: {
                 extraOptions: chartConfigs.barChartOptions,
                 chartData: {
@@ -110,6 +131,23 @@ export default {
                 gradientColors: config.colors.primaryGradient,
                 gradientStops: [1, 0.3, 0],
             },
+
+        pieChart: {
+            chartData: {
+            labels: [1, 2, 3],
+            datasets: [
+                {
+                label: "Emails",
+                pointRadius: 0,
+                pointHoverRadius: 0,
+                backgroundColor: ["#e2e2e2", "#ff8779", "#2a84e9" ],
+                borderWidth: 0,
+                data: [60, 40, 20]
+                }
+            ]
+            },
+            extraOptions: chartConfigs.pieChartOptions
+            }
         } 
     },
     props:['data'],
@@ -128,14 +166,13 @@ export default {
 	    renderChart:function(){
 			if(this.data===undefined){
 			// 0 값
-			this.similarity.chartData.labels=["none", "none", "none"];
-			this.similarity.chartData.datasets[0].data=[0, 0, 0];
+			this.pieChart.chartData.labels=["none"];
+            this.pieChart.chartData.datasets[0].data=[100];
                 
             }else{
-                // ML 결과 받아오기 , axios
-
-                this.similarity.chartData.labels=["Pattern1", "pattern2", "pattern3"];
-                this.similarity.chartData.datasets[0].data=[70,40, 50];
+                // ML 결과 받아오기 , axios (Pie, modal 둘 다 채워야됌)
+                this.pieChart.chartData.labels=["Pattern1", "pattern2", "pattern3"];
+                this.pieChart.chartData.datasets[0].data=[70,40, 50];
             }
 	    }
 
