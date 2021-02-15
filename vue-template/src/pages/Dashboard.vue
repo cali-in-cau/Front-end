@@ -31,7 +31,6 @@
     </div>
     <div class="row">
 
-
       <!-- yae 유사도 그래프, :stockName="stockName" 요런식으로 값을 넣어줘야함 나중에-->
       <div class="col-lg-4">
          <pattern-sim v-if="showPattern" :data="mainStock"></pattern-sim>
@@ -39,23 +38,7 @@
 
       <!-- Stock Info -->
       <div class="col-lg-4">
-        <card
-        type="chart"
-        cardCold
-        >
-        <template slot="header">
-          <h5 class="card-category">Real Time Information</h5>
-          <h3 class="card-title"><i class="tim-icons icon-chart-bar-32 text-primary "></i>Stock Info</h3>
-        </template>
-          <line-chart
-                  class="chart-area"
-                  chart-id="green-line-chart"
-                  :chart-data="greenLineChart.chartData"
-                  :gradient-colors="greenLineChart.gradientColors"
-                  :gradient-stops="greenLineChart.gradientStops"
-                  :extra-options="greenLineChart.extraOptions">
-          </line-chart>
-        </card>  
+        <stock-info v-if="showInfo" :data="mainStock" ></stock-info>
       </div>
       <!-- Notification -->
       <div class="col-lg-4">
@@ -95,8 +78,6 @@ import {
   Card
 } from "@/components/index";
 
-
-import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
 import Bookmark from './Dashboard/Bookmark'
 import config from '@/config';
@@ -104,6 +85,7 @@ import config from '@/config';
 import SearchBar from '@/components/SearchBar';
 import StockChart from '@/components/StockChart';
 import PatternSim from '@/components/PatternSim';
+import StockInfo from '@/components/StockInfo';
 
 import BaseAlert from '@/components/BaseAlert';
 //import BaseButton from '@/components/BaseButton';
@@ -114,11 +96,11 @@ import axios from "axios";
 export default {
   components: {
     Card,
-    LineChart,
     Bookmark,
     SearchBar,
     StockChart,
     PatternSim,
+    StockInfo,
     BaseAlert
     //BaseButton
   },
@@ -137,32 +119,6 @@ export default {
       info:"accept",
       //main stock
       showStockChart:false,
-
-      //Stock Info
-      greenLineChart: {
-        extraOptions: chartConfigs.greenChartOptions,
-        chartData: {
-          labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-          datasets: [{
-            label: "Data",
-            fill: true,
-            borderColor: config.colors.primary,
-            borderWidth: 2,
-            borderDash: [],
-            borderDashOffset: 0.0,
-            pointBackgroundColor: config.colors.primary,
-            pointBorderColor: 'rgba(255,255,255,0)',
-            pointHoverBackgroundColor: config.colors.primary,
-            pointBorderWidth: 20,
-            pointHoverRadius: 4,
-            pointHoverBorderWidth: 15,
-            pointRadius: 4,
-            data: [80, 100, 70, 80, 120, 80],
-          }]
-        },
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.2, 0],
-      },
       //Pattern Similarity
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
@@ -210,10 +166,12 @@ export default {
         .then((res)=>{
           console.log("favorites", res);
 	        this.favorites = res.data;
-		this.mainStock = res.data[0];
-		this.showMainStock = true;
-          	this.showbookmark = true; 
-          	this.showPattern = true; 
+          this.mainStock = res.data[0];
+
+          this.showMainStock = true;
+          this.showbookmark = true; 
+          this.showPattern = true; 
+          this.showInfo = true;
         })
         .catch((err)=>{
           console.log(err);
