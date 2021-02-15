@@ -44,7 +44,7 @@
 
 
         </template>
-          <bar-chart
+          <bar-chart v-if="showChart"
                   class="chart-area"
                   chart-id="similar-chart"
                   :chart-data="similarity.chartData"
@@ -73,12 +73,13 @@ export default {
     },
     data(){
         return{
+	    showChart:false,
             modals: false,
             // yae - 안에 내용 created() 에서 채워 넣기
             similarity: {
                 extraOptions: chartConfigs.barChartOptions,
                 chartData: {
-                labels: ['HeadAndShoulders', 'DoubleTop', 'RisingEdge'],
+                labels: [],
                 datasets: [{
                     label: "Patterns",
                     fill: true,
@@ -86,7 +87,7 @@ export default {
                     borderWidth: 2,
                     borderDash: [],
                     borderDashOffset: 0.0,
-                    data: [90, 20,75],
+                    data: [],
                     }]
                 },
                 gradientColors: config.colors.primaryGradient,
@@ -96,7 +97,7 @@ export default {
                 extraOptions: chartConfigs.barChartOptions,
                 chartData: {
                 labels: ['HeadAndShoulders', 'DoubleTop', 'RisingEdge', 'yaewon', 'jjeong', 'yaeyae'],
-                datasets: [{
+                datasets:[ {
                     label: "Patterns",
                     fill: true,
                     borderColor: config.colors.info,
@@ -113,13 +114,35 @@ export default {
     },
     props:['data'],
     watch:{
-	data(newVal,oldVal){
-		console.log("patternSim changed:", oldVal,"->", newVal);
-	}
+        async data(newVal,oldVal){
+            
+            this.showChart=false;
+            console.log("patternSim changed:", oldVal,"->", newVal);
+            
+            await this.renderChart();	
+            this.showChart=true;
+        },
+
     },
-    created:function(){
-        // yae- 여기서 pattern similarity 받아오기
-        console.log("pattern similarity props:", this.data)
+    methods:{
+	    renderChart:function(){
+			if(this.data===undefined){
+			// 0 값
+			this.similarity.chartData.labels=["none", "none", "none"];
+			this.similarity.chartData.datasets[0].data=[0, 0, 0];
+                
+            }else{
+                // ML 결과 받아오기 , axios
+
+                this.similarity.chartData.labels=["Pattern1", "pattern2", "pattern3"];
+                this.similarity.chartData.datasets[0].data=[70,40, 50];
+            }
+	    }
+
+    },
+    created:async function(){
+        await this.renderChart();	
+        this.showChart=true;
     }
 }
 </script>

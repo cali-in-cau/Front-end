@@ -268,8 +268,8 @@ export default {
         timeout: 0
       });
     },
-    changeStock:function(code, name){
-      console.log("changeStock methods,, change it later in Dashboard.vue", code, name);
+    changeStock:function(item){
+      this.mainStock={stock_code:item[1], stock_name:item[0]};
     },
     deleteStock:function(code){
 	axios.post("/back/users/favorite/delete/"+code,{token:this.token})

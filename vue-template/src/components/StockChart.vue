@@ -11,7 +11,8 @@
                     </template>
                     <template>
                         <!-- 여기도 검색한 회사명 넣어줘야 함 -->
-                        <h2 class="card-title">{{data.stock_name}}</h2>
+                        <h2 v-if="showTitle" class="card-title">{{data.stock_name}}</h2>
+                        <h2 v-else class="card-title">Add a Bookmark!</h2>
                     </template>
                 </div>
                 <!-- Buttons(Group) -->
@@ -50,7 +51,7 @@
             </div>
         </template>
         <!-- Chart(Line, Green) -->
-        <line-chart
+        <line-chart v-if="showChart"
             class="chart-area"
             ref="bigChart"
             chart-id="big-line-chart"
@@ -84,7 +85,8 @@ export default {
     },
     data(){
         return{
-            corName : "",
+            showChart:false,
+            showTitle:false,
             //고정값
             bigLineChartCategories:[
                 "1Day",
@@ -165,7 +167,19 @@ export default {
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
       this.corName = stockData.info.name;
-    }
+    },
+    renderChart:function(){
+			if(this.data===undefined){
+        // 0 값
+        this.showTitle = false
+        console.log("Stock chart, data undefined")
+
+      }else{
+        // ML 결과 받아오기 , axios
+        this.showTitle = true
+
+      }
+	  }
   },
   mounted(){
     this.i18n = this.$i18n;
@@ -175,14 +189,20 @@ export default {
     }
     this.initBigChart(0);
   },
-  created:function(){
-	console.log("stockChart created : ", this.data);
+  created:async function(){
+    await this.renderChart();
+    this.showChart=true;
   },
   watch:{
-	data(newVal, oldVal){
-		console.log("stock Chart stock changed:", oldVal,"->", newVal);
-	}
-  },
+        async data(newVal,oldVal){
+            
+            this.showChart=false;
+            console.log("Stock Chart changed:", oldVal,"->", newVal);
+            await this.renderChart();	
+            this.showChart=true;
+        },
+
+    },
   beforeDestroy() {
     if (this.$rtl.isRTL) {
       this.i18n.locale = 'en';
