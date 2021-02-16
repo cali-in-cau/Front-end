@@ -82,6 +82,8 @@ import * as chartConfigs from '@/components/Charts/config';
 import config from '@/config';
 import Modal from "@/components/Modal";
 
+import EventBus from '@/eventbus';
+
 
 export default {
     components:{
@@ -92,7 +94,8 @@ export default {
     },
     data(){
         return{
-	    showChart:false,
+            period:"",
+	        showChart:false,
             modals: false,
             /*
             // yae - 안에 내용 created() 에서 채워 넣기
@@ -170,14 +173,19 @@ export default {
             this.pieChart.chartData.datasets[0].data=[100];
                 
             }else{
-                // ML 결과 받아오기 , axios (Pie, modal 둘 다 채워야됌)
+                // ML 결과 받아오기 , axios 
+                // this.period로 기간 설정해서 날리면된다.
                 this.pieChart.chartData.labels=["Pattern1", "pattern2", "pattern3"];
                 this.pieChart.chartData.datasets[0].data=[70,40, 50];
             }
 	    }
-
     },
     created:async function(){
+        EventBus.$on('period', (payload)=>{
+            this.period=payload;
+            console.log("Pattern Sim period:", this.period);
+        })
+
         await this.renderChart();	
         this.showChart=true;
     }
