@@ -52,7 +52,7 @@
                   :extra-options="similarity.extraOptions">
           </bar-chart>
           -->
-            <pie-chart
+            <pie-chart v-if="showChart"
                   :chart-data="pieChart.chartData"
                   :extra-options="pieChart.extraOptions"
                   :height="120"
@@ -61,10 +61,8 @@
             
             <div class="card-footer">
                     <div v-for="(label, index) in pieChart.chartData.labels" :key="index">
-                    <div v-for="(data, index) in pieChart.chartData.datasets[0].data" :key="index">
-                        <h4 v-if="label != 'none'" style="margin:0;">{{index+1}}. {{label}} / {{data}}%</h4>
-                        <h2 v-else>No data</h2>
-                    </div>
+                        <h4 v-if="label != 'none'" style="margin:0;">{{index+1}}. {{label}} / {{pieChart.chartData.datasets[0].data[index]}}%</h4>
+                        <h2 v-else>No data</h2> 
                     </div>
             </div>
         </card>
@@ -84,6 +82,8 @@ import Modal from "@/components/Modal";
 
 import EventBus from '@/eventbus';
 
+
+import pie from '@/pieData.json';
 
 export default {
     components:{
@@ -137,7 +137,7 @@ export default {
 
         pieChart: {
             chartData: {
-            labels: [1, 2, 3],
+            labels: [],
             datasets: [
                 {
                 label: "Emails",
@@ -145,7 +145,7 @@ export default {
                 pointHoverRadius: 0,
                 backgroundColor: ["#e2e2e2", "#ff8779", "#2a84e9" ],
                 borderWidth: 0,
-                data: [60, 40, 20]
+                data: []
                 }
             ]
             },
@@ -166,26 +166,58 @@ export default {
 
     },
     methods:{
-	    renderChart:function(){
+
+	    renderChart:async function(){
+            /*
 			if(this.data===undefined){
-			// 0 값
-			this.pieChart.chartData.labels=["none"];
-            this.pieChart.chartData.datasets[0].data=[100];
-                
-            }else{
-                // ML 결과 받아오기 , axios 
-                // this.period로 기간 설정해서 날리면된다.
-                this.pieChart.chartData.labels=["Pattern1", "pattern2", "pattern3"];
-                this.pieChart.chartData.datasets[0].data=[70,40, 50];
+                // 0 값
+                console.log("undefined Data here");
+                this.pieChart.chartData.labels=["none"];
+                this.pieChart.chartData.datasets[0].data=[100];
             }
+            */
+            await EventBus.$on('period', (payload)=>{
+                //period 의 길이로 ML 서버와 통신하기
+                this.period=payload;
+                console.log("Pattern Sim period:", this.period);
+
+
+                var temp =[]
+                // 데이터 오는거 보고 파싱 잘해야함
+                Object.keys(pie.talibv2).forEach(function(key) {
+                    temp.push({key:key.split('_')[0], count:pie.talibv2[key].length});
+                })
+                temp.sort(function(a,b){
+                    return b.count -a.count;
+                });
+
+                // 상위 3개까지만 받을거기 때문에 3개 이상일 때에만 slice
+                if(temp.length > 3){
+                    temp = temp.slice(0, 3);
+                }
+                console.log(temp)
+
+                var sumCount = 0;
+                for(var i = 0 ; i < temp.length; i++){
+                    sumCount += temp[i].count;
+                }
+
+                console.log("sumCount : ", sumCount);
+
+                this.pieChart.chartData.labels=[]
+                this.pieChart.chartData.datasets[0].data=[]
+
+                for(var j = 0 ; j < temp.length; j++){
+                    this.pieChart.chartData.labels.push(temp[j].key)
+                    this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );
+                    
+                }
+            })
 	    }
     },
     created:async function(){
-        EventBus.$on('period', (payload)=>{
-            this.period=payload;
-            console.log("Pattern Sim period:", this.period);
-        })
-
+        
+        console.log("crated pattern sim");
         await this.renderChart();	
         this.showChart=true;
     }

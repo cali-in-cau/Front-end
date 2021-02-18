@@ -88,6 +88,7 @@ export default {
                 "جلسات"
             ],
             //stock data
+            
             bigLineChart: {
                 allData: [
                     stockData.data.value.map(a=>a.Close),
@@ -130,6 +131,7 @@ export default {
       if(option===undefined){
         option = "1D";
       }
+      //if(this.data !== undefined) 
       EventBus.$emit('period', option[1]);
 
       let chartData = {
@@ -171,7 +173,7 @@ export default {
       }else{
         // ML 결과 받아오기 , axios
         this.showTitle = true
-
+  
       }
 	  }
   },
