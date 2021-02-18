@@ -154,6 +154,55 @@ export default {
   },
   created: async function(){
 
+    var promise1 = new Promise(function(resolve, reject){
+
+      axios.get('/back/users/get_user')
+            .then((res)=>{
+                this.token = res.data.token;
+                console.log("promise1")
+                resolve("1111")
+
+            })
+            .catch((err)=>{
+                console.log(err)
+                reject("1111Error")
+            });
+
+  
+
+    });
+
+
+    var promise2 = new Promise(function(resolve, reject){
+
+      axios.post("/back/users/favorites",{token:this.token})
+        .then((res)=>{
+          console.log("favorites", res);
+          console.log("promise2");
+	        this.favorites = res.data;
+          this.mainStock = res.data[0];
+
+          this.showMainStock = true;
+          this.showbookmark = true; 
+          this.showPattern = true; 
+          this.showInfo = true;
+          resolve("222222")
+        })
+        .catch((err)=>{
+          console.log(err);
+          reject("2222Error")
+        });
+
+    });
+
+    Promise.all([promise1,promise2])
+      .then((value)=>{
+        console.log("모두 완료됐슴다.", value);
+      })
+      .catch((err)=>{
+        console.log("error여요", err);
+      });
+    /*
     await axios.get('/back/users/get_user')
             .then((res)=>{
                 this.token = res.data.token;
@@ -176,7 +225,7 @@ export default {
         .catch((err)=>{
           console.log(err);
         });
-
+*/
   },
   methods:{
     initBigChart(index) {
