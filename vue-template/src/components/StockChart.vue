@@ -62,6 +62,10 @@
             :gradient-stops="bigLineChart.gradientStops"
             :extra-options="bigLineChart.extraOptions">
         </line-chart>
+        <card v-else mr-auto text-center>
+            <!-- 버튼 동작은 아직 지정하지 않음 -->
+            <h3>Add Bookmarks for Stock Graph</h3>
+        </card>
     </card>
 </template>       
 
@@ -89,20 +93,9 @@ export default {
         return{
             showChart:false,
             showTitle:false,
+            //stockData: {},
             //고정값
             corName : "",
-            //value
-            //stockData : {},
-            //stockDate : [],
-            //stockValue : [],
-
-            //stockData1 : {},
-            //stockDate1 : [],
-            //stockValue1 : [],
-
-            //stockData2 : {},
-            //stockDate2 : [],
-            //stockValue2 : [],
 
             //고정값...day, week, month
             bigLineChartCategories:[
@@ -118,27 +111,8 @@ export default {
 
             //stock data
             bigLineChart: {
-                allData: [
-                    //stockData.data.value.map(a=>a.Close),
-                    //this.stockData.data.value.map(a=>a.Close),
-                    
-                    //this.stockValue,
-                    //this.stockValue1,
-                    //this.stockValue2
-                    
-                    //[100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],//1번버튼
-                    //[80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],//2번버튼
-                    //[60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]//3번버튼
-                ],
-                allDate:[
-                    //stockData.data.date.slice(-10,),
-                    //stockData.data.date.slice(-200,),
-                    //stockData.data.date.slice(),
-
-                    //this.stockDate,
-                    //this.stockDate1,
-                    //this.stockDate2,
-                ],
+                allData: [],
+                allDate:[],
                 activeIndex: 0,
                 chartData: { datasets: [{ }]},
                 extraOptions: chartConfigs.purpleChartOptions,
@@ -178,12 +152,10 @@ export default {
         }],
         //라벨 여기있다
         labels: this.bigLineChart.allDate[index]
-        //labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
       }
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
-      //this.corName = this.stockData.info.name;
     },
 
     renderChart:async function(){
@@ -191,74 +163,104 @@ export default {
         // 0 값
             this.showTitle = false
             console.log("Stock chart, data undefined")
-        }else{
-        // ML 결과 받아오기 , axios
+
+        }
+        else{
+            // ML 결과 받아오기 , axios
             this.showTitle = true
             console.log("stockChart created : ", this.data);
-        //axios.get('/back/stocks/graph/'+this.data.stock_code)
-        //day
-        await axios.get('/back/stocks/graph/',{
-            params: {
-                date_type : "day",
-                start_date : 1,
-                stock_code : this.data.stock_code
-                }
+            //axios.get('/back/stocks/graph/'+this.data.stock_code)
+        
+            const promise1 = axios.get('/back/stocks/graph/',{
+                params: {
+                    date_type : "day",
+                    start_date : 3,
+                    stock_code : this.data.stock_code
+                    }
+            })
+            const promise2 = axios.get('/back/stocks/graph/', {
+                params: {
+                    date_type : "week",
+                    start_date : 8,
+                    stock_code : this.data.stock_code
+                    }
+            })
+            const promise3 = axios.get('/back/stocks/graph/', {
+                params: {
+                    date_type : "month",
+                    start_date : 12,
+                    stock_code : this.data.stock_code
+                    }
+            })
+
+            Promise.all([promise1, promise2, promise3])
+                .then((res)=>{
+                    //console.log(res)
+                    this.stockData = res[0].data.data;
+                    console.log("get data from Back", this.stockData);
+                    for (let i = 0; i < 3; i++) {
+                        this.bigLineChart.allData.push(res[i].data.data.value.map(a=>a.Close));
+                        this.bigLineChart.allDate.push(res[i].data.data.date);       
+                    }
+                    console.log("allData", this.bigLineChart.allData);
+                    console.log("allDate", this.bigLineChart.allDate); 
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+
+            /* //day
+            await axios.get('/back/stocks/graph/',{
+                params: {
+                    date_type : "day",
+                    start_date : 1,
+                    stock_code : this.data.stock_code
+                    }
             })
             .then((res)=>{
-                this.corName = res.data.info.name;
-                //console.log("corName", this.corName);
                 this.stockData = res.data.data;
                 console.log("get daily data from Back", this.stockData);
-                //this.stockDate = this.stockData.date;
-                //console.log("date", this.stockDate);
-                //this.stockValue = this.stockData.value.map(a=>a.Close);
-                //console.log("val", this.stockValue);
                 this.bigLineChart.allData.push(res.data.data.value.map(a=>a.Close));
                 this.bigLineChart.allDate.push(res.data.data.date);
             })
             .catch((err)=>{
                 console.log(err);
             }),
-        //week
-        await axios.get('/back/stocks/graph/', {
-            params: {
-                date_type : "week",
-                start_date : 5,
-                stock_code : this.data.stock_code
+            //week
+            await axios.get('/back/stocks/graph/', {
+                params: {
+                    date_type : "week",
+                    start_date : 5,
+                    stock_code : this.data.stock_code
                 }
             })
             .then((res)=>{
-                this.stockData1 = res.data.data;
                 console.log("get weekly data from Back", this.stockData1);
-                //this.stockDate1 = this.stockData1.date;
-                //this.stockValue1 = this.stockData1.value.map(a=>a.Close);
                 this.bigLineChart.allData.push(res.data.data.value.map(a=>a.Close));
                 this.bigLineChart.allDate.push(res.data.data.date);            })
             .catch((err)=>{
                 console.log(err);
             }), 
-        //month
-        await axios.get('/back/stocks/graph/', {
-            params: {
-                date_type : "month",
-                start_date : 10,
-                stock_code : this.data.stock_code
+            //month
+            await axios.get('/back/stocks/graph/', {
+                params: {
+                    date_type : "month",
+                    start_date : 10,
+                    stock_code : this.data.stock_code
                 }
             })
             .then((res)=>{
                 this.stockData2 = res.data.data;
                 console.log("get monthly data from Back", this.stockData2);
-                //this.stockDate2 = this.stockData2.date;
-                //this.stockValue2 = this.stockData2.value.map(a=>a.Close);
                 this.bigLineChart.allData.push(res.data.data.value.map(a=>a.Close));
                 this.bigLineChart.allDate.push(res.data.data.date);
             })
             .catch((err)=>{
                 console.log(err);
-            })
+            }) */
         }
-        }
-    },
+    }
+  },
   mounted(){
     this.i18n = this.$i18n;
     if (this.enableRTL) {
@@ -273,7 +275,6 @@ export default {
     console.log('here');
     this.showChart=true;
   },
-  
   watch:{
         async data(newVal,oldVal){      
             this.showChart=false;
