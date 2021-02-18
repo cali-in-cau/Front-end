@@ -50,9 +50,11 @@
                 <div class="col-md-4 ml-auto mr-auto text-center">
                   <!-- 버튼 동작은 아직 지정하지 않음 -->
                   <base-button type="primary" block @click="notifyVue('Sign', 'In')">Sign in/up</base-button>
+                  <div class="text-center my-3">
                 </div>
               </div>
             </div>
+          </div>
           </div>
       </card>
     </div>     
