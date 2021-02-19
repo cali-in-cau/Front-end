@@ -91,7 +91,8 @@ export default {
   },
   data(){
     return{
-      mainStock:{stock_code:"AAPL", stock_name:"APPLE INC"},
+      mainStock:{stock_code:"005930", stock_name:"삼성전자"},
+      //mainStock:{stock_code:"068760", stock_name:"셀트리온제약"},
       //user Info
       info:"non",
       //Stock Info

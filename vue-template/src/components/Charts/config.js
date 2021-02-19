@@ -74,7 +74,7 @@ export let purpleChartOptions = {
         suggestedMin: 50000,
         //suggestedMax: 70000,
         padding: 20,
-        stepSize: 100,
+        //stepSize: 10000,
         fontColor: "#9a9a9a"
       }
     }],

@@ -62,15 +62,14 @@
             :gradient-stops="bigLineChart.gradientStops"
             :extra-options="bigLineChart.extraOptions">
         </line-chart>
-        <card v-else mr-auto text-center>
+        <card v-else class="ml-auto mr-auto">
+            <h3><i class="tim-icons icon-sound-wave"></i></h3>
             <h3>Add Bookmarks for Stock Graph</h3>
         </card>
     </card>
 </template>       
 
 <script>
-
-//import stockData from '../components/dumpSS.json';
 
 import {
   Card
@@ -92,6 +91,7 @@ export default {
         return{
             showChart:false,
             showTitle:false,
+            // mem:false,
             //stockData: {},
             //고정값
             corName : "",
@@ -156,17 +156,32 @@ export default {
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
     },
+    mounted(){
+        this.i18n = this.$i18n;
+        if (this.enableRTL) {
+            this.i18n.locale = 'ar';
+            this.$rtl.enableRTL();
+        }
+        this.initBigChart(0);
+        this.$LineChart.UpdateGradients();
+    },
 
     renderChart:async function(){
+        console.log('path',this.$router.currentRoute.path)
 		if(this.data===undefined){
         // 0 값
             this.showTitle = false
             console.log("Stock chart, data undefined")
-
+            // if(this.$router.currentRoute.path=='/accept/dashboard'){
+            //     this.mem = true
+            //     console.log("Mem Stockchart, Empty Bookmark")
+            // }
         }
         else{
             // ML 결과 받아오기 , axios
             this.showTitle = true
+            this.mem = true
+            console.log("Mem StockChart")
             console.log("stockChart created : ", this.data);
             //axios.get('/back/stocks/graph/'+this.data.stock_code)
         
@@ -180,14 +195,14 @@ export default {
             const promise2 = axios.get('/back/stocks/graph/', {
                 params: {
                     date_type : "week",
-                    start_date : 8,
+                    start_date : 7,
                     stock_code : this.data.stock_code
                     }
             })
             const promise3 = axios.get('/back/stocks/graph/', {
                 params: {
                     date_type : "month",
-                    start_date : 12,
+                    start_date : 15,
                     stock_code : this.data.stock_code
                     }
             })
@@ -195,8 +210,8 @@ export default {
             Promise.all([promise1, promise2, promise3])
                 .then((res)=>{
                     //console.log(res)
-                    this.stockData = res[0].data.data;
-                    console.log("get data from Back", this.stockData);
+                    //this.stockData = res[0].data.data;
+                    //console.log("get data from Back", this.stockData);
                     for (let i = 0; i < 3; i++) {
                         this.bigLineChart.allData.push(res[i].data.data.value.map(a=>a.Close));
                         this.bigLineChart.allDate.push(res[i].data.data.date);       
@@ -207,71 +222,13 @@ export default {
                 .catch((err)=>{
                     console.log(err);
                 })
-
-            /* //day
-            await axios.get('/back/stocks/graph/',{
-                params: {
-                    date_type : "day",
-                    start_date : 1,
-                    stock_code : this.data.stock_code
-                    }
-            })
-            .then((res)=>{
-                this.stockData = res.data.data;
-                console.log("get daily data from Back", this.stockData);
-                this.bigLineChart.allData.push(res.data.data.value.map(a=>a.Close));
-                this.bigLineChart.allDate.push(res.data.data.date);
-            })
-            .catch((err)=>{
-                console.log(err);
-            }),
-            //week
-            await axios.get('/back/stocks/graph/', {
-                params: {
-                    date_type : "week",
-                    start_date : 5,
-                    stock_code : this.data.stock_code
-                }
-            })
-            .then((res)=>{
-                console.log("get weekly data from Back", this.stockData1);
-                this.bigLineChart.allData.push(res.data.data.value.map(a=>a.Close));
-                this.bigLineChart.allDate.push(res.data.data.date);            })
-            .catch((err)=>{
-                console.log(err);
-            }), 
-            //month
-            await axios.get('/back/stocks/graph/', {
-                params: {
-                    date_type : "month",
-                    start_date : 10,
-                    stock_code : this.data.stock_code
-                }
-            })
-            .then((res)=>{
-                this.stockData2 = res.data.data;
-                console.log("get monthly data from Back", this.stockData2);
-                this.bigLineChart.allData.push(res.data.data.value.map(a=>a.Close));
-                this.bigLineChart.allDate.push(res.data.data.date);
-            })
-            .catch((err)=>{
-                console.log(err);
-            }) */
+            
         }
     }
   },
-  mounted(){
-    this.i18n = this.$i18n;
-    if (this.enableRTL) {
-      this.i18n.locale = 'ar';
-      this.$rtl.enableRTL();
-    }
-    this.initBigChart(0);
-    this.$LineChart.UpdateGradients();
-  },
   created:async function(){
     await this.renderChart();
-    console.log('here');
+    //console.log('here');
     this.showChart=true;
   },
   watch:{
