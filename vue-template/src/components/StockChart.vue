@@ -132,6 +132,9 @@ export default {
   },
   methods:{
     initBigChart(index) {
+      if(index==undefined){
+          index=0
+      }
       let chartData = {
         datasets: [{
             fill: true,
