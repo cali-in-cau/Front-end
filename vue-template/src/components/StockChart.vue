@@ -63,7 +63,6 @@
             :extra-options="bigLineChart.extraOptions">
         </line-chart>
         <card v-else mr-auto text-center>
-            <!-- 버튼 동작은 아직 지정하지 않음 -->
             <h3>Add Bookmarks for Stock Graph</h3>
         </card>
     </card>
