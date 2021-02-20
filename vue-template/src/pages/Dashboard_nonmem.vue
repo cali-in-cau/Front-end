@@ -50,9 +50,11 @@
                 <div class="col-md-4 ml-auto mr-auto text-center">
                   <!-- 버튼 동작은 아직 지정하지 않음 -->
                   <base-button type="primary" block @click="notifyVue('Sign', 'In')">Sign in/up</base-button>
+                  <div class="text-center my-3">
                 </div>
               </div>
             </div>
+          </div>
           </div>
       </card>
     </div>     
@@ -123,7 +125,8 @@ export default {
   },
   data(){
     return{
-      mainStock:{stock_code:"AAPL", stock_name:"APPLE INC"},
+      mainStock:{stock_code:"005930", stock_name:"삼성전자"},
+      //mainStock:{stock_code:"068760", stock_name:"셀트리온제약"},
       //user Info
       info:"non",
       //Stock Info
