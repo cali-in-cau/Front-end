@@ -142,7 +142,7 @@ export default {
         this.details.data = exData;
         
         var currentPath = this.$router.currentRoute.path;
-        console.log("hey",this.$router.currentRoute.path)
+
         if(currentPath.includes("accept")){
             this.isMember = true;
         }

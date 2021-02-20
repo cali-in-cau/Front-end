@@ -94,6 +94,52 @@ export let purpleChartOptions = {
   }
 }
 
+export let pieChartOptions = {
+  ...basicOptions,
+  cutoutPercentage: 70,
+  tooltips: {
+    backgroundColor: "#f5f5f5",
+    titleFontColor: "#333",
+    bodyFontColor: "#666",
+    bodySpacing: 4,
+    xPadding: 12,
+    mode: "nearest",
+    intersect: 0,
+    position: "nearest"
+  },
+
+  scales: {
+    yAxes: [
+      {
+        display: 0,
+        ticks: {
+          display: false
+        },
+        gridLines: {
+          drawBorder: false,
+          zeroLineColor: "transparent",
+          color: "rgba(255,255,255,0.05)"
+        }
+      }
+    ],
+
+    xAxes: [
+      {
+        display: 0,
+        barPercentage: 1.6,
+        gridLines: {
+          drawBorder: false,
+          color: "rgba(255,255,255,0.1)",
+          zeroLineColor: "transparent"
+        },
+        ticks: {
+          display: false
+        }
+      }
+    ]
+  }
+};
+
 export let orangeChartOptions = {
   ...basicOptions,
   tooltips: {

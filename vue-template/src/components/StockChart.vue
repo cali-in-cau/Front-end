@@ -29,20 +29,7 @@
                                 :class="{active:bigLineChart.activeIndex === index}"
                                     id="index">
                                 <input type="radio"
-                                    @click="initBigChart(index)"
-                                    name="options" autocomplete="off"
-                                    :checked="bigLineChart.activeIndex === index">
-                                {{ option }}
-                            </label>
-                        </template>
-                        <template v-else>
-                            <label v-for="(option, index) in bigLineChartCategoriesAr"
-                                :key="option"
-                                class="btn btn-success btn-sm btn-simple"
-                                :class="{active:bigLineChart.activeIndex === index}"
-                                :id="index">
-                                <input type="radio"
-                                    @click="initBigChart(index)"
+                                    @click="initBigChart(index, option)"
                                     name="options" autocomplete="off"
                                     :checked="bigLineChart.activeIndex === index">
                                 {{ option }}
@@ -79,7 +66,10 @@ import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
 import config from '@/config';
 
+import EventBus from '@/eventbus';
+
 import axios from 'axios'
+
 
 export default {
 
@@ -109,6 +99,7 @@ export default {
             ],
 
             //stock data
+            
             bigLineChart: {
                 allData: [],
                 allDate:[],
@@ -131,10 +122,14 @@ export default {
     }
   },
   methods:{
-    initBigChart(index) {
-      if(index==undefined){
-          index=0
+
+    initBigChart(index, option) {
+      if(option===undefined){
+        option = "1D";
       }
+      //if(this.data !== undefined) 
+      EventBus.$emit('period', option[1]);
+
       let chartData = {
         datasets: [{
             fill: true,
