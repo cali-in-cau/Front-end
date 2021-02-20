@@ -20,7 +20,7 @@
                     <div class="btn-group btn-group-toggle"
                         data-toggle="buttons"
                         :class="isRTL ? 'float-left' : 'float-right'">
-                        <template v-if="!isRTL">
+                        
                             <label v-for="(option, index) in bigLineChartCategories"
                                 :key="option"
                                 class="btn btn-success btn-sm btn-simple"
@@ -32,7 +32,7 @@
                                     :checked="bigLineChart.activeIndex === index">
                                 {{ option }}
                             </label>
-                        </template>
+                        
                     </div>
                 </div>
             </div>
@@ -47,12 +47,16 @@
             :gradient-stops="bigLineChart.gradientStops"
             :extra-options="bigLineChart.extraOptions">
         </line-chart>
+        <card v-else class="ml-auto mr-auto">
+            <h3><i class="tim-icons icon-sound-wave"></i></h3>
+            <h3>Add Bookmarks for Stock Graph</h3>
+        </card>
+
+        
     </card>
 </template>       
 
 <script>
-
-import stockData from '../components/dumpSS.json';
 
 import {
   Card
@@ -64,7 +68,7 @@ import config from '@/config';
 
 import EventBus from '@/eventbus';
 
-//import axios from 'axios'
+import axios from 'axios'
 
 export default {
 
@@ -90,20 +94,8 @@ export default {
             //stock data
             
             bigLineChart: {
-                allData: [
-                    stockData.data.value.map(a=>a.Close),
-                    //stockData.data.value.map(a=>a.Close),
-                    //stockData.data.value.map(a=>a.Close)
-                    //[100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],//1번버튼
-                    //[80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],//2번버튼
-                    //[60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]//3번버튼
-                ],
-                allDate:[
-                    stockData.data.date.slice(-10,),
-                    stockData.data.date.slice(-50,),
-                    stockData.data.date.slice(),
-                ],
-
+                allData: [],
+                allDate:[],
                 activeIndex: 0,
                 chartData: { datasets: [{ }]},
                 extraOptions: chartConfigs.purpleChartOptions,
@@ -128,6 +120,7 @@ export default {
   },
   methods:{
     initBigChart(index, option) {
+
       if(option===undefined){
         option = "1D";
       }
@@ -148,50 +141,97 @@ export default {
             pointHoverRadius: 4,
             pointHoverBorderWidth: 15,
             pointRadius: 4,
-            //찾았다 데이터
-            //data: this.bigLineChart.allData[index]
-            data: this.bigLineChart.allData[0]
+           
+            data:[]
         }],
-        //라벨 여기있다
-        //아 이거 이렇게 적어도 되는걸까ㅋㅎㅠ
-
-        //labels: stockData.data.date.slice(-30,),
-        labels: this.bigLineChart.allDate[index]
-        //labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+        labels:[]
       }
-      this.$refs.bigChart.updateGradients(chartData);
-      this.bigLineChart.chartData = chartData;
+      chartData.datasets[0].data=this.bigLineChart.allData[index];
+      chartData.labels=this.bigLineChart.allDate[index];
+
+      setTimeout(()=> {
+          this.$refs.bigChart.updateGradients(chartData);
+          this.bigLineChart.chartData = chartData;
+      }, 300);
+    
       this.bigLineChart.activeIndex = index;
-      this.corName = stockData.info.name;
     },
-    renderChart:function(){
-			if(this.data===undefined){
+    renderChart:async function(){
+        console.log('path',this.$router.currentRoute.path)
+      if(this.data===undefined){
         // 0 값
-        this.showTitle = false
-        console.log("Stock chart, data undefined")
-
-      }else{
-        // ML 결과 받아오기 , axios
-        this.showTitle = true
-  
-      }
-	  }
-  },
-  mounted(){
-    this.i18n = this.$i18n;
-    if (this.enableRTL) {
-      this.i18n.locale = 'ar';
-      this.$rtl.enableRTL();
+            this.showTitle = false
+            console.log("Stock chart, data undefined")
+            // if(this.$router.currentRoute.path=='/accept/dashboard'){
+            //     this.mem = true
+            //     console.log("Mem Stockchart, Empty Bookmark")
+            // }
+        }
+        else{
+            // ML 결과 받아오기 , axios
+            this.showTitle = true
+            this.mem = true
+            console.log("Mem StockChart")
+            console.log("stockChart created : ", this.data);
+            //axios.get('/back/stocks/graph/'+this.data.stock_code)
+        
+            const promise1 = axios.get('/back/stocks/graph/',{
+                params: {
+                    date_type : "day",
+                    start_date : 3,
+                    stock_code : this.data.stock_code
+                    }
+            })
+            const promise2 = axios.get('/back/stocks/graph/', {
+                params: {
+                    date_type : "week",
+                    start_date : 7,
+                    stock_code : this.data.stock_code
+                    }
+            })
+            const promise3 = axios.get('/back/stocks/graph/', {
+                params: {
+                    date_type : "month",
+                    start_date : 15,
+                    stock_code : this.data.stock_code
+                    }
+            })
+            Promise.all([promise1, promise2, promise3])
+                .then((res)=>{
+                    //console.log(res)
+                    //this.stockData = res[0].data.data;
+                    //console.log("get data from Back", this.stockData);
+                    for (let i = 0; i < 3; i++) {
+                        this.bigLineChart.allData.push(res[i].data.data.value.map(a=>a.Close));
+                        this.bigLineChart.allDate.push(res[i].data.data.date);       
+                    }
+                    console.log("allData", this.bigLineChart.allData);
+                    console.log("allDate", this.bigLineChart.allDate); 
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+                .finally(()=>{
+                  console.log("show show");
+                  
+                  setTimeout(()=> {
+                    this.showChart=true;
+                    this.initBigChart(0);
+                    console.log("true set timeout", this.bigLineChart.chartData);
+                  }, 500);
+                  
+                })
+            
+        }
     }
-    this.initBigChart(0);
   },
   created:async function(){
-    await this.renderChart();
-    this.showChart=true;
+    //this.initBigChart(0, "1Day");
+    await this.renderChart(); // data 집어 넣는 부분
+
   },
   watch:{
         async data(newVal,oldVal){
-            
             this.showChart=false;
             console.log("Stock Chart changed:", oldVal,"->", newVal);
             await this.renderChart();	
