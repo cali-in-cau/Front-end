@@ -11,8 +11,8 @@
             <div class="row" style="margin:1rem;">
               <div class="ml-auto mr-auto">
                 <h4 class="d-inline" style="margin-right:2rem;">Status</h4>
-                <button :disabled="isBull"  type="button" class="btn animation-on-hover btn-success d-inline">Bullish</button>
-                <button :disabled="isBear" type="button" class="btn animation-on-hover btn-warning d-inline">Bearish</button>
+                <button :disabled=0  type="button" class="btn animation-on-hover btn-success d-inline">Bullish</button>
+                <button :disabled=1 type="button" class="btn animation-on-hover btn-warning d-inline">Bearish</button>
               </div>
             </div>
 
@@ -67,7 +67,7 @@ export default {
 	    renderChart:function(){
 			if(this.data===undefined){
 			// 0 값
-                this.isBull=true;
+                this.isBull=false;
                 this.isBull=true;
                 this.predictedPrice=0;
                 
