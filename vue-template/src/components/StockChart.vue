@@ -171,10 +171,10 @@ export default {
             // ML 결과 받아오기 , axios
             this.showTitle = true
             this.mem = true
-            console.log("Mem StockChart")
             console.log("stockChart created : ", this.data);
             //axios.get('/back/stocks/graph/'+this.data.stock_code)
-        
+       		
+		console.log("heheheheheAXIOSAXIOS", this.data.stock_name); 
             const promise1 = axios.get('/back/stocks/graph/',{
                 params: {
                     date_type : "day",
@@ -201,6 +201,8 @@ export default {
                     //console.log(res)
                     //this.stockData = res[0].data.data;
                     //console.log("get data from Back", this.stockData);
+				this.bigLineChart.allData =[]
+				this.bigLineChart.allDate=[]
                     for (let i = 0; i < 3; i++) {
                         this.bigLineChart.allData.push(res[i].data.data.value.map(a=>a.Close));
                         this.bigLineChart.allDate.push(res[i].data.data.date);       
@@ -212,12 +214,10 @@ export default {
                     console.log(err);
                 })
                 .finally(()=>{
-                  console.log("show show");
                   
                   setTimeout(()=> {
                     this.showChart=true;
                     this.initBigChart(0);
-                    console.log("true set timeout", this.bigLineChart.chartData);
                   }, 500);
                   
                 })
@@ -235,7 +235,6 @@ export default {
             this.showChart=false;
             console.log("Stock Chart changed:", oldVal,"->", newVal);
             await this.renderChart();	
-            this.showChart=true;
         },
 
     },

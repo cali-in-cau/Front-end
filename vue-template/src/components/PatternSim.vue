@@ -146,7 +146,6 @@ export default {
             console.log("patternSim changed:", oldVal,"->", newVal);
             
             await this.renderChart();	
-            this.showChart=true;
         },
 
     },
@@ -156,7 +155,6 @@ export default {
             
 			if(this.data===undefined){
                 // 0 값
-                console.log("undefined Data here");
                 this.pieChart.chartData.labels=["none"];
                 this.pieChart.chartData.datasets[0].data=[100];
             }
@@ -183,14 +181,12 @@ export default {
                     if(temp.length > 3){
                         temp = temp.slice(0, 3);
                     }
-                    console.log(temp)
 
                     var sumCount = 0;
                     for(var i = 0 ; i < temp.length; i++){
                         sumCount += temp[i].count;
                     }
 
-                    console.log("sumCount : ", sumCount);
 
                     this.pieChart.chartData.labels=[]
                     this.pieChart.chartData.datasets[0].data=[]
@@ -200,7 +196,6 @@ export default {
                         this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );
                         
                     }
-
                     /* Modal Data */
                     var modal = bar["2021-01-02"].slice(0,5)
 
@@ -214,16 +209,17 @@ export default {
                         this.detailSimilarity.chartData.datasets[0].data.push(parseInt(modal[k][1]*100))
                         
                     }
-                    console.log("Bar-Data parsing", modal);
+			this.showChart=true;
                 })
         }
+
         }
     },
     created:async function(){
         
         console.log("crated pattern sim");
         await this.renderChart();	
-        this.showChart=true;
+        //this.showChart=true;
     }
 }
 </script>
