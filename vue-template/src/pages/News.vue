@@ -4,15 +4,30 @@
       <div class="col-sm-12">
         <card class="card">
           <h4 slot="header" class="card-title">
-            <template v-if="!isRTL">
-              Simple Table
+            <template>
+              News
             </template>
-            <template v-else>
-              جدول بسيط
-            </template>
+            
           </h4>
           <div class="table-responsive">
-            <user-table></user-table>
+            <base-table :data="tableData" thead-classes="text-primary">
+              <template slot-scope="{ row }">
+                <div class="row" style="cursor: pointer;" @click="openNews(row.url)">
+                  <div class="col-sm-4">
+                    <td class="text-center">
+                      <div ><img :src="row.img" alt="photo" /></div>
+                    </td>
+                  </div>
+
+                  <div class="col-sm-8">
+                    <td class="text-left">
+                      <h2 class="title">{{ row.title }}</h2>
+                      <h4 class="text-muted">{{ row.desc }}</h4>
+                    </td>
+                  </div>
+                </div>
+              </template>
+            </base-table>
           </div>
         </card>
       </div>
@@ -26,55 +41,41 @@ import {
   Card
 } from "@/components/index";
 
-import UserTable from './Dashboard/UserTable'
-//import config from '@/config';
+import BaseTable from '@/components/BaseTable';
 
 import axios from 'axios';
 
 export default {
   components: {
     Card,
-    UserTable
+    BaseTable
+    //UserTable
   },
   data(){
     return{
+      tableData:[],
     }
   },
   computed:{
-    enableRTL() {
-      return this.$route.query.enableRTL;
-    },
-    isRTL(){
-      return this.$rtl.isRTL;
-    }
+    
   },
   methods:{
+    openNews: function(link){
+      window.open(link);
+    }
   },
   mounted(){
-    /*
-    this.i18n = this.$i18n;
-    if (this.enableRTL) {
-      this.i18n.locale = 'ar';
-      this.$rtl.enableRTL();
-    }
-    this.initBigChart(0);
-    */
+
   },
   beforeDestroy() {
-    /*
-    if (this.$rtl.isRTL) {
-      this.i18n.locale = 'en';
-      this.$rtl.disableRTL();
-    }
-    */
   },
-  created:function(){
+  created:async function(){
     
     console.log("news enter created");
     
-    axios.get('/back/news/')
+    await axios.get('/back/news/')
     .then((res)=>{
-      console.log("Enter news", res);
+      this.tableData = res.data.news;
     })
     .catch((err)=>{
       console.log(err);

@@ -43,7 +43,7 @@
     methods:{
       
       deleteFav:function(code){
-	this.$emit('deleteStock', code);
+	      this.$emit('deleteStock', code);
       },
       changeStock:function(code, name){
         this.$emit('changeStock', [code, name]);
@@ -55,9 +55,9 @@
       }
     },
     watch:{
-	data(newVal, oldVal){
-	    console.log('favorites changed: ', newVal, ' | was: ', oldVal)
-	}
+	    data(newVal, oldVal){
+	      console.log('favorites changed: ', newVal, ' | was: ', oldVal)
+	    }
     },
   }
 </script>
