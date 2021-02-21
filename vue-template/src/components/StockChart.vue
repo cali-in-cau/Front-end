@@ -78,6 +78,7 @@ export default {
     },
     data(){
         return{
+		passingData:{},
             showChart:false,
             showTitle:false,
             //고정값
@@ -120,12 +121,23 @@ export default {
   },
   methods:{
     initBigChart(index, option) {
-
+	
+      let idx = 0;
       if(option===undefined){
         option = "1D";
+      }else{
+
+	let period = option[1];
+
+	if(period=="W"){
+		idx = 1;
+	}else if(period=="M"){
+		idx =2;
+	}
       }
-      //if(this.data !== undefined) 
-      EventBus.$emit('period', option[1]);
+
+      if(this.data !== undefined) 
+      	EventBus.$emit('period', this.passingData[idx].data);
 
       let chartData = {
         datasets: [{
@@ -174,7 +186,6 @@ export default {
             console.log("stockChart created : ", this.data);
             //axios.get('/back/stocks/graph/'+this.data.stock_code)
        		
-		console.log("heheheheheAXIOSAXIOS", this.data.stock_name); 
             const promise1 = axios.get('/back/stocks/graph/',{
                 params: {
                     date_type : "day",
@@ -198,7 +209,8 @@ export default {
             })
             Promise.all([promise1, promise2, promise3])
                 .then((res)=>{
-                    //console.log(res)
+			this.passingData = res;
+                    console.log("get Stock data",this.passingData)
                     //this.stockData = res[0].data.data;
                     //console.log("get data from Back", this.stockData);
 				this.bigLineChart.allData =[]
@@ -207,8 +219,8 @@ export default {
                         this.bigLineChart.allData.push(res[i].data.data.value.map(a=>a.Close));
                         this.bigLineChart.allDate.push(res[i].data.data.date);       
                     }
-                    console.log("allData", this.bigLineChart.allData);
-                    console.log("allDate", this.bigLineChart.allDate); 
+                    //console.log("allData", this.bigLineChart.allData);
+                    //console.log("allDate", this.bigLineChart.allDate); 
                 })
                 .catch((err)=>{
                     console.log(err);
