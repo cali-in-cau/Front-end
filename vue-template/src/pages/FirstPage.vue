@@ -74,7 +74,7 @@
             toNonMem(){
                 return location.href='/non';
             },
-	    login(){
+	        login(){
                 this.$gAuth.signIn()
                 .then(async (GoogleUser) => {
 			console.log("login success")
