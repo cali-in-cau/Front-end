@@ -88,8 +88,7 @@ import EventBus from '@/eventbus';
 import axios from 'axios';
 
 //Mock Data
-import pie from '@/pieData.json';
-import bar from '@/BarData.json';
+
 
 export default {
     components:{
@@ -211,25 +210,36 @@ export default {
                             this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );   
                         }
                         
-                        })
+                        let newestDate="";
+                        Object.keys(res.data.image_prediction).sort().forEach(function(key) {
+                            newestData=key;
+                        });
+
+                        /* Modal Data */
+                        var modal = res.data.image_prediction[newestDate].slice(0,5)
+
+                        this.detailSimilarity.chartData.labels = [];
+                        this.detailSimilarity.chartData.datasets[0].data = [];
+
+                        for(var k = 0 ; k < modal.length ; k++){
+
+                            var patternName = modal[k][0].split("_")[0]
+                            this.detailSimilarity.chartData.labels.push(patternName);
+                            this.detailSimilarity.chartData.datasets[0].data.push(parseInt(modal[k][1]*100))
+                            
+                        }
+
+
+                    })
+
+
+
                     .catch((err)=>{
                         console.log(err);
                     })    
                     
                     
-                    /* Modal Data */
-                    var modal = bar["2021-01-02"].slice(0,5)
-
-                    this.detailSimilarity.chartData.labels = [];
-                    this.detailSimilarity.chartData.datasets[0].data = [];
-
-                    for(var k = 0 ; k < modal.length ; k++){
-
-                        var patternName = modal[k][0].split("_")[0]
-                        this.detailSimilarity.chartData.labels.push(patternName);
-                        this.detailSimilarity.chartData.datasets[0].data.push(parseInt(modal[k][1]*100))
-                        
-                    }
+                    
 			this.showChart=true;
                 })
         }
