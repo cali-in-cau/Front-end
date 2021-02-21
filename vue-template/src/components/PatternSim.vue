@@ -32,7 +32,7 @@
                     :show-close="true">
 
                     <template slot="header">
-                        <h3 class="modal-title" id="exampleModalLabel">Detail Similarity</h3>
+                        <h3 class="modal-title" id="exampleModalLabel">Detail Similarity in {{modalDate}}</h3>
                     </template>
                     
                     <bar-chart
@@ -55,6 +55,7 @@
                   :extra-options="similarity.extraOptions">
           </bar-chart>
           -->
+            
             <pie-chart v-if="showChart"
                   :chart-data="pieChart.chartData"
                   :extra-options="pieChart.extraOptions"
@@ -68,6 +69,8 @@
                         <h2 v-else>No data</h2> 
                     </div>
             </div>
+
+
         </card>
 </template>
 
@@ -99,7 +102,7 @@ export default {
     },
     data(){
         return{
-            period:"",
+            modalDate:"",
 	        showChart:false,
             modals: false,
 
@@ -214,7 +217,7 @@ export default {
                         Object.keys(res.data.image_prediction).sort().forEach(function(key) {
                             newestDate=key;
                         });
-
+                        this.modalDate=newestDate;
                         /* Modal Data */
                         var modal = res.data.image_prediction[newestDate].slice(0,5)
 
