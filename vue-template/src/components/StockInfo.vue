@@ -34,7 +34,6 @@
 
 <script>
 
-import EventBus from '@/eventbus';
 
 import {
   Card
@@ -82,12 +81,7 @@ export default {
           this.isBear=true;
           this.predictedPrice=83000;
 
-          console.log("Stock Info data here");
-          await EventBus.$on('period', (stockData)=>{
-            console.log("stock Data here", stockData);
-
-            this.showInfo = true;
-          });	
+          
         }
       }
 

@@ -117,8 +117,7 @@ export default {
         },
     },
     created: function(){
-        this.mainStock = { "stock_name":this.name, "stock_code":this.$route.params.code}
-        console.log("1231231231Pattern Data", this.patternData);
+        this.mainStock = { "stock_name":this.name, "stock_code":this.$route.params.code};
         // 어떻게보면 주식 그래프 용도
         //yae - 다음에 MSFT-> stockName으로 바꿔주기
         // 어떻게 이렇게 잘 파싱해서 가져와서 넣으면 된다.

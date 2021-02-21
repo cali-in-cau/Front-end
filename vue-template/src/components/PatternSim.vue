@@ -85,6 +85,8 @@ import Modal from "@/components/Modal";
 
 import EventBus from '@/eventbus';
 
+import axios from 'axios';
+
 //Mock Data
 import pie from '@/pieData.json';
 import bar from '@/BarData.json';
@@ -160,14 +162,31 @@ export default {
             }
             
             else{
-                await EventBus.$on('period', (payload)=>{
+                await EventBus.$on('period', async (payload)=>{
                     //period 의 길이로 ML 서버가 아니라 이젠 스톡 차트에서 주는 데이터가 된다.
-                    this.period=payload;
-
-                    console.log("Pattern Sim period:", this.period);
-                    
+                    console.log("pattern event : ", payload);
+                    let type = ""
+                    if(payload =="D"){
+                        type="day";
+                    }else if(payload=="W"){
+                        type="week";
+                    }else{
+                        type="month";
+                    }
                     /* Pie Data */
-
+                    await axios.get("/back/stocks/predict/pattern",{
+                        params:{
+                            date_type:type,
+                            stock_code:this.data.stock_code
+                        }
+                    })
+                    .then((res)=>{
+                        console.log("get ML Data from Pattern", res);
+                    })
+                    .catch((err)=>{
+                        console.log(err);
+                    })    
+                    
                     var temp =[]
                     // 데이터 오는거 보고 파싱 잘해야함
                     Object.keys(pie.talibv2).forEach(function(key) {
@@ -216,8 +235,6 @@ export default {
         }
     },
     created:async function(){
-        
-        console.log("crated pattern sim");
         await this.renderChart();	
         //this.showChart=true;
     }
