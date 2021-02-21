@@ -65,30 +65,31 @@ export default {
     },
     methods:{
 	    renderChart:async function(){
-		this.showInfo = false;
-		console.log("before Enter data in Stock info : ", this.data);
-			if(this.data===undefined){
-			// 0 값
-		console.log("render!!!!");
-                this.isBull=false;
-                this.isBull=false;
-                this.predictedPrice=0;
-		
-		this.showInfo = true;
-                
-            }else{
-                // ML 결과 받아오기 , axios
-                this.isBull=false;
-		this.isBear=true;
-                this.predictedPrice=83000;
-        	console.log("Stock Info data here");
-		await EventBus.$on('period', (stockData)=>{
-			console.log("stock Data here", stockData);
+		    this.showInfo = false;
+		    console.log("before Enter data in Stock info : ", this.data);
+        if(this.data===undefined){
+        // 0 값
+          console.log("render!!!!");
+                      this.isBull=false;
+                      this.isBull=false;
+                      this.predictedPrice=0;
+          
+          this.showInfo = true;
+                  
+        }else{
+          // ML 결과 받아오기 , axios
+          this.isBull=false;
+          this.isBear=true;
+          this.predictedPrice=83000;
 
-			this.showInfo = true;
-		});	
-            }
-	    }
+          console.log("Stock Info data here");
+          await EventBus.$on('period', (stockData)=>{
+            console.log("stock Data here", stockData);
+
+            this.showInfo = true;
+          });	
+        }
+      }
 
     },
     created:async function(){

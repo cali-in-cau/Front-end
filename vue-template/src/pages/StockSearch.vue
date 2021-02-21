@@ -44,8 +44,11 @@
         </div>
 
         <div class="row">
+            <div class="col-sm-8">
+                <stock-chart :data="mainStock"></stock-chart>
+            </div>
             <div class="col-sm-4">
-                <pattern-sim :data="patternData"></pattern-sim>
+                <pattern-sim :data="mainStock"></pattern-sim>
             </div>
         </div>
 
@@ -61,10 +64,9 @@ import {
 import SearchBar from '@/components/SearchBar';
 import BaseTable from "@/components/BaseTable";
 import PatternSim from '@/components/PatternSim'
-
+import StockChart from '@/components/StockChart';
 
 import axios from "axios";
-
 
 const tableColumns = ["Open", "High", "Low", "Close", "Volume"];
 
@@ -73,7 +75,8 @@ export default {
         Card,
         SearchBar,
         BaseTable,
-        PatternSim
+        PatternSim,
+        StockChart
     },
     data(){
         return{
@@ -87,7 +90,7 @@ export default {
             isMember: false, 
             token:"",
 
-	    patternData:[],
+	    mainStock:{},
         }
     },
     props:['name'],
@@ -114,7 +117,8 @@ export default {
         },
     },
     created: function(){
-	this.patternData = [this.name, this.$route.params.code]
+        this.mainStock = { "stock_name":this.name, "stock_code":this.$route.params.code}
+        console.log("1231231231Pattern Data", this.patternData);
         // 어떻게보면 주식 그래프 용도
         //yae - 다음에 MSFT-> stockName으로 바꿔주기
         // 어떻게 이렇게 잘 파싱해서 가져와서 넣으면 된다.
