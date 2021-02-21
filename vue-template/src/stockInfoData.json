@@ -2,9 +2,5 @@
     "2018-01-01" : {
        "stock" : "bull",
        "price_predict" : 155.5
-    },
-    "2018-02-01" : {
-        "stock" : "bear",
-        "price_predict" : 125.5
-     }
+    }
 }

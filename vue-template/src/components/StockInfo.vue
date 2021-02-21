@@ -38,7 +38,7 @@
 import {
   Card
 } from "@/components/index";
-
+import axios from "axios";
 //import stockInfoData from '@/src/stockInfoData';
 
 export default {
@@ -77,13 +77,16 @@ export default {
                   
         }else{
           // ML 결과 받아오기 , axios
-          // axios.get("/back/stocks/predict/stockinfo",{
-          //   params:{
-          //     date_type: '',
-          //     stock_code:this.da
-          //   }
+          axios.get("/back/stocks/predict/stockinfo",{
+            params:{
+              date_type: '1',
+              stock_code:this.data.stock_code
+            }
+          })
+          .then((res)=>{
+            Object.keys(res.data)
 
-          // })
+          })
           //if stockInfoData.
           this.isBull=false;
           this.isBear=true;

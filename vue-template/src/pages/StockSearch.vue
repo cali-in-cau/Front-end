@@ -74,7 +74,7 @@ import StockChart from '@/components/StockChart';
 
 import axios from "axios";
 
-const tableColumns = ["Open", "High", "Low", "Close", "Volume"];
+const tableColumns = ["Open", "High", "Low", "Close", "Volume", "Change"];
 
 export default {
     components:{
@@ -86,6 +86,7 @@ export default {
     },
     data(){
         return{
+            tmdata:[],
             showStock:false,
             details: {
                 title: "Simple Table",
@@ -140,28 +141,23 @@ export default {
         .then((res)=>{
             //미완
             console.log("Searched Recent data", (res.data.data.value.slice(-1)[0]));
-            console.log("Recent data Array", Object.values(res.data.data.value.slice(-1)[0]));
-            //this.details.data = [];
-            var tm = (Object.values(res.data.data.value.slice(-1)[0]));
-            console.log("tm test", tm);
-            this.details.data = tm;
-            console.log('please',this.details.data);
-            
+            this.details.data = [res.data.data.value.slice(-1)[0]];
+            console.log('details.data',this.details.data); 
             this.showStock = true;
             console.log("showStock true");
         })
         .catch((err)=>{
             console.log(err)
         })
-
         // var exData =[{
-        //     Open : this.openP,
-        //     High : this.highP,
-        //     Low : this.lowP,
-        //     Close : this.closeP,
-        //     Volume : this.volumeP
-        // }];
-
+        //     Open : 5080300,
+        //     High : this.tmdata.High,
+        //     Low : this.tmdata.Low,
+        //     Close : this.tmdata.Close,
+        //     Volume : this.tmdata.Volume
+        //     Chagne
+        //  }];
+        //console.log('exData', exData);
         //this.details.data = exData;
         
         var currentPath = this.$router.currentRoute.path;
