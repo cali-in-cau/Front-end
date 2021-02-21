@@ -38,40 +38,43 @@
             </div>
         </template>
         <!-- Chart(Line, Green) -->
-        <line-chart v-if="showChart"
-            class="chart-area"
-            ref="bigChart"
-            chart-id="big-line-chart"
-            :chart-data="bigLineChart.chartData"
-            :gradient-colors="bigLineChart.gradientColors"
-            :gradient-stops="bigLineChart.gradientStops"
-            :extra-options="bigLineChart.extraOptions">
-        </line-chart>
-        <card v-else class="ml-auto mr-auto">
-            <h3><i class="tim-icons icon-sound-wave"></i></h3>
-            <h3>Add Bookmarks for Stock Graph</h3>
-        </card>
+        <template v-if="showTitle">
+            <line-chart v-if="showChart" 
+                class="chart-area"
+                ref="bigChart"
+                chart-id="big-line-chart"
+                :chart-data="bigLineChart.chartData"
+                :gradient-colors="bigLineChart.gradientColors"
+                :gradient-stops="bigLineChart.gradientStops"
+                :extra-options="bigLineChart.extraOptions">
+            </line-chart>
+            <card v-else class="ml-auto mr-auto">
+                <h3><i class="tim-icons icon-sound-wave"></i></h3>
+                <h3>Loading Graph...</h3>
+            </card>
+        </template>
+        <template v-else>
+            <card class="ml-auto mr-auto">
+                <h3><i class="tim-icons icon-sound-wave"></i></h3>
+                <h3>Add Bookmarks for Stock Graph</h3>
+            </card>
+        </template>    
 
-        
     </card>
 </template>       
 
 <script>
-
 import {
   Card
 } from "@/components/index";
-
 import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
 import config from '@/config';
-
 import EventBus from '@/eventbus';
 
 import axios from 'axios'
 
 export default {
-
     components: {
         Card,
         LineChart
@@ -81,6 +84,9 @@ export default {
 		passingData:{},
             showChart:false,
             showTitle:false,
+
+            mlData:{},
+
             //고정값
             bigLineChartCategories:[
                 "1Day",
@@ -92,8 +98,7 @@ export default {
                 "المشتريات",
                 "جلسات"
             ],
-            //stock data
-            
+            //stock data 
             bigLineChart: {
                 allData: [],
                 allDate:[],
@@ -104,10 +109,6 @@ export default {
                 gradientStops: [1, 0.4, 0],
                 categories: []
             },
-            
-            //list:undefined
-
-            
         }
     },
   props:['data'],
@@ -160,16 +161,14 @@ export default {
       }
       chartData.datasets[0].data=this.bigLineChart.allData[index];
       chartData.labels=this.bigLineChart.allDate[index];
-
       setTimeout(()=> {
           this.$refs.bigChart.updateGradients(chartData);
           this.bigLineChart.chartData = chartData;
-      }, 300);
-    
+      }, 200); 
       this.bigLineChart.activeIndex = index;
     },
     renderChart:async function(){
-        console.log('path',this.$router.currentRoute.path)
+      console.log('path',this.$router.currentRoute.path)
       if(this.data===undefined){
         // 0 값
             this.showTitle = false
@@ -209,8 +208,10 @@ export default {
             })
             Promise.all([promise1, promise2, promise3])
                 .then((res)=>{
-			this.passingData = res;
+
+			              this.passingData = res;
                     console.log("get Stock data",this.passingData)
+
                     //this.stockData = res[0].data.data;
                     //console.log("get data from Back", this.stockData);
 				this.bigLineChart.allData =[]
@@ -230,11 +231,29 @@ export default {
                   setTimeout(()=> {
                     this.showChart=true;
                     this.initBigChart(0);
-                  }, 500);
+
+                    console.log("true set timeout", this.bigLineChart.chartData);
+                  }, 200);
                   
-                })
-            
+                })          
         }
+    },
+    getMLdata: function(){
+        axios.get('/back/ml/predict/',{
+            params:{
+                date_type: this.mlData.info.date_type,
+                start_date: 1,
+                stock_code: this.data.stock_code
+            }
+        })
+        .then((res)=>{
+            console.log("get ML data", res.data);
+            this.mlData = res.data;
+        })
+        .catch(err=>{
+            console.log("MLdata-error", err);
+        })
+
     }
   },
   created:async function(){
@@ -248,7 +267,6 @@ export default {
             console.log("Stock Chart changed:", oldVal,"->", newVal);
             await this.renderChart();	
         },
-
     },
   beforeDestroy() {
     if (this.$rtl.isRTL) {
