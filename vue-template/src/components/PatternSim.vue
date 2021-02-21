@@ -182,39 +182,41 @@ export default {
                     })
                     .then((res)=>{
                         console.log("get ML Data from Pattern", res);
-                    })
+
+                        var temp =[]
+                        // 데이터 오는거 보고 파싱 잘해야함
+                        Object.keys(res.data.talibv2).forEach(function(key) {
+                            temp.push({key:key.split('_')[0], count:res.data.talibv2[key].length});
+                        })
+                        temp.sort(function(a,b){
+                            return b.count -a.count;
+                        });
+
+                        // 상위 3개까지만 받을거기 때문에 3개 이상일 때에만 slice
+                        if(temp.length > 3){
+                            temp = temp.slice(0, 3);
+                        }
+
+                        var sumCount = 0;
+                        for(var i = 0 ; i < temp.length; i++){
+                            sumCount += temp[i].count;
+                        }
+
+
+                        this.pieChart.chartData.labels=[]
+                        this.pieChart.chartData.datasets[0].data=[]
+
+                        for(var j = 0 ; j < temp.length; j++){
+                            this.pieChart.chartData.labels.push(temp[j].key)
+                            this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );   
+                        }
+                        
+                        })
                     .catch((err)=>{
                         console.log(err);
                     })    
                     
-                    var temp =[]
-                    // 데이터 오는거 보고 파싱 잘해야함
-                    Object.keys(pie.talibv2).forEach(function(key) {
-                        temp.push({key:key.split('_')[0], count:pie.talibv2[key].length});
-                    })
-                    temp.sort(function(a,b){
-                        return b.count -a.count;
-                    });
-
-                    // 상위 3개까지만 받을거기 때문에 3개 이상일 때에만 slice
-                    if(temp.length > 3){
-                        temp = temp.slice(0, 3);
-                    }
-
-                    var sumCount = 0;
-                    for(var i = 0 ; i < temp.length; i++){
-                        sumCount += temp[i].count;
-                    }
-
-
-                    this.pieChart.chartData.labels=[]
-                    this.pieChart.chartData.datasets[0].data=[]
-
-                    for(var j = 0 ; j < temp.length; j++){
-                        this.pieChart.chartData.labels.push(temp[j].key)
-                        this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );
-                        
-                    }
+                    
                     /* Modal Data */
                     var modal = bar["2021-01-02"].slice(0,5)
 
