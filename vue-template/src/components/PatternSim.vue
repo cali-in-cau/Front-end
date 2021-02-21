@@ -141,8 +141,6 @@ export default {
     props:['data'],
     watch:{
         async data(newVal,oldVal){
-            
-            this.showChart=false;
             console.log("patternSim changed:", oldVal,"->", newVal);
             await this.renderChart();	
         },
@@ -151,10 +149,9 @@ export default {
     methods:{
 
 	    renderChart:async function(){
-            
+           	this.showChart = false; 
 		if(this.data===undefined){
                 // 0 값
-		console.log("pie data undefined!!");
                 this.pieChart.chartData.labels=[];
                 this.pieChart.chartData.labels.push("none");
                 this.pieChart.chartData.datasets[0].data=[];

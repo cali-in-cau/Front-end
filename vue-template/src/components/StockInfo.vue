@@ -11,8 +11,8 @@
             <div class="row" style="margin:1rem;">
               <div class="ml-auto mr-auto">
                 <h4 class="d-inline" style="margin-right:2rem;">Status</h4>
-                <button :disabled=0  type="button" class="btn animation-on-hover btn-success d-inline">Bullish</button>
-                <button :disabled=1 type="button" class="btn animation-on-hover btn-warning d-inline">Bearish</button>
+                <button :disabled="isBull"  type="button" class="btn animation-on-hover btn-success d-inline">Bullish</button>
+                <button :disabled="isBear"  type="button" class="btn animation-on-hover btn-warning d-inline">Bearish</button>
               </div>
             </div>
 
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+
+import EventBus from '@/eventbus';
 
 import {
   Card
@@ -55,34 +57,42 @@ export default {
     watch:{
         async data(newVal,oldVal){
             
-            this.showInfo=false;
             console.log("StockInfo changed:", oldVal,"->", newVal);
             
             await this.renderChart();	
-            this.showInfo=true;
         },
 
     },
     methods:{
-	    renderChart:function(){
+	    renderChart:async function(){
+		this.showInfo = false;
+		console.log("before Enter data in Stock info : ", this.data);
 			if(this.data===undefined){
 			// 0 값
+		console.log("render!!!!");
                 this.isBull=false;
-                this.isBull=true;
+                this.isBull=false;
                 this.predictedPrice=0;
+		
+		this.showInfo = true;
                 
             }else{
                 // ML 결과 받아오기 , axios
                 this.isBull=false;
+		this.isBear=true;
                 this.predictedPrice=83000;
-        
+        	console.log("Stock Info data here");
+		await EventBus.$on('period', (stockData)=>{
+			console.log("stock Data here", stockData);
+
+			this.showInfo = true;
+		});	
             }
 	    }
 
     },
     created:async function(){
         await this.renderChart();	
-        this.showInfo=true;
     }
 
     
