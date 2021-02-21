@@ -14,8 +14,11 @@
 		    </div>	
 		
 		    <div class="col-sm-3">
-
-			<button v-if="data !== undefined" class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="modals = true">
+            
+            <button v-if="data !== undefined" class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="modals = true">
+             <!--       
+			<button class="card-title btn-rotate btn btn-link btn-icon float-right" type="primary" @click="modals = true">
+                -->
 			    <i class="tim-icons icon-zoom-split"></i>
 			</button>  
 		    </div>
@@ -82,8 +85,9 @@ import Modal from "@/components/Modal";
 
 import EventBus from '@/eventbus';
 
-
+//Mock Data
 import pie from '@/pieData.json';
+import bar from '@/BarData.json';
 
 export default {
     components:{
@@ -97,30 +101,11 @@ export default {
             period:"",
 	        showChart:false,
             modals: false,
-            /*
-            // yae - 안에 내용 created() 에서 채워 넣기
-            similarity: {
-                extraOptions: chartConfigs.barChartOptions,
-                chartData: {
-                labels: [],
-                datasets: [{
-                    label: "Patterns",
-                    fill: true,
-                    borderColor: config.colors.info,
-                    borderWidth: 2,
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    data: [],
-                    }]
-                },
-                gradientColors: config.colors.primaryGradient,
-                gradientStops: [1, 0.3, 0],
-            },
-            */
+
             detailSimilarity: {
                 extraOptions: chartConfigs.barChartOptions,
                 chartData: {
-                labels: ['HeadAndShoulders', 'DoubleTop', 'RisingEdge', 'yaewon', 'jjeong', 'yaeyae'],
+                labels: [],
                 datasets:[ {
                     label: "Patterns",
                     fill: true,
@@ -128,7 +113,7 @@ export default {
                     borderWidth: 2,
                     borderDash: [],
                     borderDashOffset: 0.0,
-                    data: [90, 60,75, 20, 40, 30],
+                    data: [],
                     }]
                 },
                 gradientColors: config.colors.primaryGradient,
@@ -156,32 +141,32 @@ export default {
     props:['data'],
     watch:{
         async data(newVal,oldVal){
-            
-            this.showChart=false;
             console.log("patternSim changed:", oldVal,"->", newVal);
-            
             await this.renderChart();	
-            this.showChart=true;
         },
 
     },
     methods:{
 
 	    renderChart:async function(){
-            
-			if(this.data===undefined){
+           	this.showChart = false; 
+		if(this.data===undefined){
                 // 0 값
-                console.log("undefined Data here");
-                this.pieChart.chartData.labels=["none"];
-                this.pieChart.chartData.datasets[0].data=[100];
+                this.pieChart.chartData.labels=[];
+                this.pieChart.chartData.labels.push("none");
+                this.pieChart.chartData.datasets[0].data=[];
+                this.pieChart.chartData.datasets[0].data.push(100);
+		this.showChart = true
             }
+            
             else{
                 await EventBus.$on('period', (payload)=>{
-                    //period 의 길이로 ML 서버와 통신하기
+                    //period 의 길이로 ML 서버가 아니라 이젠 스톡 차트에서 주는 데이터가 된다.
                     this.period=payload;
-                    console.log("Pattern Sim period:", this.period);
-                    console.log("heyhey", this.data);
 
+                    console.log("Pattern Sim period:", this.period);
+                    
+                    /* Pie Data */
 
                     var temp =[]
                     // 데이터 오는거 보고 파싱 잘해야함
@@ -196,14 +181,12 @@ export default {
                     if(temp.length > 3){
                         temp = temp.slice(0, 3);
                     }
-                    console.log(temp)
 
                     var sumCount = 0;
                     for(var i = 0 ; i < temp.length; i++){
                         sumCount += temp[i].count;
                     }
 
-                    console.log("sumCount : ", sumCount);
 
                     this.pieChart.chartData.labels=[]
                     this.pieChart.chartData.datasets[0].data=[]
@@ -213,15 +196,30 @@ export default {
                         this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );
                         
                     }
+                    /* Modal Data */
+                    var modal = bar["2021-01-02"].slice(0,5)
+
+                    this.detailSimilarity.chartData.labels = [];
+                    this.detailSimilarity.chartData.datasets[0].data = [];
+
+                    for(var k = 0 ; k < modal.length ; k++){
+
+                        var patternName = modal[k][0].split("_")[0]
+                        this.detailSimilarity.chartData.labels.push(patternName);
+                        this.detailSimilarity.chartData.datasets[0].data.push(parseInt(modal[k][1]*100))
+                        
+                    }
+			this.showChart=true;
                 })
         }
+
         }
     },
     created:async function(){
         
         console.log("crated pattern sim");
         await this.renderChart();	
-        this.showChart=true;
+        //this.showChart=true;
     }
 }
 </script>
