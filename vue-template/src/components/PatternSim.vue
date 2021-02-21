@@ -61,7 +61,10 @@
                   :height="120"
                 >
             </pie-chart>
-            
+            <card v-else class="ml-auto mr-auto">
+                <h3><i class="tim-icons icon-chart-pie-36"></i></h3>
+                <h3>Loading...</h3>
+            </card>
             <div class="card-footer">
                     <div v-for="(label, index) in pieChart.chartData.labels" :key="index">
                         <h4 v-if="label != 'none'" style="margin:0;">{{index+1}}. {{label}} / {{pieChart.chartData.datasets[0].data[index]}}%</h4>
@@ -147,7 +150,6 @@ export default {
 
     },
     methods:{
-
 	    renderChart:async function(){
            	this.showChart = false; 
 		if(this.data===undefined){

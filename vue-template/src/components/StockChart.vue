@@ -195,7 +195,7 @@ export default {
             const promise2 = axios.get('/back/stocks/graph/', {
                 params: {
                     date_type : "week",
-                    start_date : 84,
+                    start_date : 120,
                     stock_code : this.data.stock_code
                     }
             })
