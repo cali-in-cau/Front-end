@@ -59,6 +59,7 @@
                 <h3>Add Bookmarks for Stock Graph</h3>
             </card>
         </template>    
+
     </card>
 </template>       
 
@@ -70,7 +71,9 @@ import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
 import config from '@/config';
 import EventBus from '@/eventbus';
+
 import axios from 'axios'
+
 export default {
     components: {
         Card,
@@ -118,6 +121,7 @@ export default {
   },
   methods:{
     initBigChart(index, option) {
+
       if(option===undefined){
         option = "1D";
       }
@@ -235,11 +239,13 @@ export default {
         .catch(err=>{
             console.log("MLdata-error", err);
         })
+
     }
   },
   created:async function(){
     //this.initBigChart(0, "1Day");
     await this.renderChart(); // data 집어 넣는 부분
+
   },
   watch:{
         async data(newVal,oldVal){
