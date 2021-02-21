@@ -55,24 +55,24 @@
                   :extra-options="similarity.extraOptions">
           </bar-chart>
           -->
-            
-            <pie-chart v-if="showChart"
+            <template v-if="showChart">
+            <pie-chart
                   :chart-data="pieChart.chartData"
                   :extra-options="pieChart.extraOptions"
                   :height="120"
                 >
             </pie-chart>
-            <card v-else class="ml-auto mr-auto">
-                <h3><i class="tim-icons icon-chart-pie-36"></i></h3>
-                <h3>Loading...</h3>
-            </card>
             <div class="card-footer">
                     <div v-for="(label, index) in pieChart.chartData.labels" :key="index">
                         <h4 v-if="label != 'none'" style="margin:0;">{{index+1}}. {{label}} / {{pieChart.chartData.datasets[0].data[index]}}%</h4>
                         <h2 v-else>No data</h2> 
                     </div>
             </div>
-
+            </template>
+            <card v-else class="ml-auto mr-auto">
+                <h3><i class="tim-icons icon-chart-pie-36"></i></h3>
+                <h3>Loading...</h3>
+            </card>
 
         </card>
 </template>

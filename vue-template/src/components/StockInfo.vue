@@ -38,6 +38,8 @@
 import {
   Card
 } from "@/components/index";
+import axios from "axios";
+//import stockInfoData from '@/src/stockInfoData';
 
 export default {
     components: {
@@ -45,6 +47,8 @@ export default {
     },
     data(){
         return{
+            //date:'',
+            flag:'',
             showInfo:false,
             // 버튼에 불들어오게 하려면 false값이 들어가야함
             isBull:true,
@@ -55,9 +59,7 @@ export default {
     props:['data'],
     watch:{
         async data(newVal,oldVal){
-            
             console.log("StockInfo changed:", oldVal,"->", newVal);
-            
             await this.renderChart();	
         },
 
@@ -77,11 +79,24 @@ export default {
                   
         }else{
           // ML 결과 받아오기 , axios
-          this.isBull=false;
-          this.isBear=true;
-          this.predictedPrice=83000;
-
-          
+          axios.get("/back/stocks/predict/stockinfo",{
+            params:{
+              date_type: '1',
+              stock_code:this.data.stock_code
+            }
+          })
+          .then((res)=>{
+            var date = Object.keys(res.data);
+            this.flag = res.data[date].stock;
+            this.predictedPrice =res.data[date].price_predict;
+          })
+          //if stockInfoData.
+          if(this.flag=='bull'){
+            this.isBull=false;
+          }
+          else{
+            this.isBear=false;
+          }        
         }
       }
 

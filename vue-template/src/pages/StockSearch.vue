@@ -23,7 +23,9 @@
                         </div>
                     </div>
                     
-                        <h2 class>{{stockPrice}}원</h2>
+                        <h2 class v-if="showStock">{{stockPrice}}원</h2>
+                        <h2 class v-else>Loading!</h2>
+
                     </template>
                 </card>
             </div>
@@ -32,12 +34,16 @@
                 <card>
                     <template slot="header">
                         <h2 class="card-category">Details</h2>
-                        <div class="table-responsive text-left">
+
+                        <div v-if="showStock" class="table-responsive text-left">
                             <base-table :data="details.data"
                                         :columns="details.columns"
                                         thead-classes="text-primary">
                             </base-table>
                         </div>
+
+                        <h3 v-else>Loading!</h3>
+
                     </template>
                 </card>
             </div>
@@ -68,7 +74,7 @@ import StockChart from '@/components/StockChart';
 
 import axios from "axios";
 
-const tableColumns = ["Open", "High", "Low", "Close", "Volume"];
+const tableColumns = ["Open", "High", "Low", "Close", "Volume", "Change"];
 
 export default {
     components:{
@@ -80,6 +86,8 @@ export default {
     },
     data(){
         return{
+            tmdata:[],
+            showStock:false,
             details: {
                 title: "Simple Table",
                 columns: [...tableColumns],
@@ -117,40 +125,35 @@ export default {
 
         },
     },
-    created: function(){
+    created: async function(){
         this.mainStock = { "stock_name":this.name, "stock_code":this.$route.params.code};
         // 어떻게보면 주식 그래프 용도
         //yae - 다음에 MSFT-> stockName으로 바꿔주기
         // 어떻게 이렇게 잘 파싱해서 가져와서 넣으면 된다.
 
-        axios.get('/back/stocks/graph/', {
+        await axios.get('/back/stocks/graph/', {
             params: {
                 date_type : "day",
-                start_date : 1,
+                start_date : 5,
                 stock_code : this.$route.params.code
             }
         })
-        .then(function(res){
-            //미완
-            console.log("Searched data", res.data.data.value.slice(-1)[0]);
-            //console.log("entries", Object.entries(res.data.data.value.slice(-1)[0]));
-            //this.price=[];
-            this.details.data.push(Object.entries(res.data.data.value.slice(-1)[0]));
-            console.log("price", this.details.data);
+        .then((res)=>{
+            var exData =[{
+                open : res.data.data.value.slice(-1)[0].Open,
+                high : res.data.data.value.slice(-1)[0].High,
+                low : res.data.data.value.slice(-1)[0].Low,
+                close : res.data.data.value.slice(-1)[0].Close,
+                volume : res.data.data.value.slice(-1)[0].Volume,
+                change:res.data.data.value.slice(-1)[0].Change
+            }];
+            this.details.data = exData;
+            this.showStock = true;
         })
         .catch((err)=>{
             console.log(err)
         })
-
-        // var exData =[{
-        //     Open : this.openP,
-        //     High : this.highP,
-        //     Low : this.lowP,
-        //     Close : this.closeP,
-        //     Volume : this.volumeP
-        // }];
-
-        //this.details.data = exData;
+        
         
         var currentPath = this.$router.currentRoute.path;
 
