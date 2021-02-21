@@ -2,7 +2,7 @@
     <div class="content">
         <div class="row">
             <div class="col-sm-12">
-                <search-bar></search-bar>
+                <search-bar :info="info"></search-bar>
             </div>
         </div>
 
@@ -90,7 +90,8 @@ export default {
             isMember: false, 
             token:"",
 
-	    mainStock:{},
+        mainStock:{},
+        info:"",
         }
     },
     props:['name'],
@@ -154,7 +155,11 @@ export default {
         var currentPath = this.$router.currentRoute.path;
 
         if(currentPath.includes("accept")){
+            this.info="accept";
             this.isMember = true;
+        }else{
+            this.info="non";
+            this.inMember = false;
         }
     },
 
