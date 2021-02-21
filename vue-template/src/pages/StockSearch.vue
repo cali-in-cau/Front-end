@@ -139,26 +139,21 @@ export default {
             }
         })
         .then((res)=>{
-            //미완
-            console.log("Searched Recent data", (res.data.data.value.slice(-1)[0]));
-            this.details.data = [res.data.data.value.slice(-1)[0]];
-            console.log('details.data',this.details.data); 
+            var exData =[{
+                open : res.data.data.value.slice(-1)[0].Open,
+                high : res.data.data.value.slice(-1)[0].High,
+                low : res.data.data.value.slice(-1)[0].Low,
+                close : res.data.data.value.slice(-1)[0].Close,
+                volume : res.data.data.value.slice(-1)[0].Volume,
+                change:res.data.data.value.slice(-1)[0].Change
+            }];
+            this.details.data = exData;
             this.showStock = true;
-            console.log("showStock true");
         })
         .catch((err)=>{
             console.log(err)
         })
-        // var exData =[{
-        //     Open : 5080300,
-        //     High : this.tmdata.High,
-        //     Low : this.tmdata.Low,
-        //     Close : this.tmdata.Close,
-        //     Volume : this.tmdata.Volume
-        //     Chagne
-        //  }];
-        //console.log('exData', exData);
-        //this.details.data = exData;
+        
         
         var currentPath = this.$router.currentRoute.path;
 
