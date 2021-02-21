@@ -41,13 +41,14 @@ import {
 import axios from "axios";
 //import stockInfoData from '@/src/stockInfoData';
 
+
 export default {
     components: {
         Card
     },
     data(){
         return{
-            //date:'',
+            date:'',
             flag:'',
             showInfo:false,
             // 버튼에 불들어오게 하려면 false값이 들어가야함
@@ -66,15 +67,13 @@ export default {
     },
     methods:{
 	    renderChart:async function(){
-		    this.showInfo = false;
-		    console.log("before Enter data in Stock info : ", this.data);
+        
+        
         if(this.data===undefined){
         // 0 값
-          console.log("render!!!!");
-                      this.isBull=false;
-                      this.isBull=false;
-                      this.predictedPrice=0;
-          
+          this.isBull=true;
+          this.isBear=true;
+          this.predictedPrice=0;
           this.showInfo = true;
                   
         }else{
@@ -86,18 +85,29 @@ export default {
             }
           })
           .then((res)=>{
-            var date = Object.keys(res.data);
-            this.flag = res.data[date].stock;
-            this.predictedPrice =res.data[date].price_predict;
+            console.log("Mock data", res);
+        
+        
+            Object.keys(res).forEach((key)=> {
+                this.date = key;
+            })
+            console.log("key date", this.date);
+
+            this.predictedPrice = res[this.date].price_predict;
+            console.log("predicted price", this.predictedPrice);
+
+            if(res[this.date].stock=="bull"){
+              this.isBull=false;
+            }else{
+              this.isBear=false;
+            }
+
+            this.showInfo = true;
           })
-          //if stockInfoData.
-          if(this.flag=='bull'){
-            this.isBull=false;
-          }
-          else{
-            this.isBear=false;
-          }        
+          
         }
+        
+
       }
 
     },
