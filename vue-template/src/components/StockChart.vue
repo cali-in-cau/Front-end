@@ -10,10 +10,8 @@
                         <h5 class="card-category">Real Time Stock Graph</h5>
                     </template>
                     <template>
-                        <!-- 여기도 검색한 회사명 넣어줘야 함 _이게 더빠름 바꿔야징~  -->
+                        <!-- 여기도 검색한 회사명 넣어줘야 함 -->
                         <h2 v-if="showTitle" class="card-title">{{data.stock_name}}</h2>
-                        <!--
-                        <h2 v-if="showTitle" class="card-title">{{this.stock_code}}</h2>-->
                         <h2 v-else class="card-title">Add a Bookmark!</h2>
                     </template>
                 </div>
@@ -22,7 +20,7 @@
                     <div class="btn-group btn-group-toggle"
                         data-toggle="buttons"
                         :class="isRTL ? 'float-left' : 'float-right'">
-                        <template v-if="!isRTL">
+                        
                             <label v-for="(option, index) in bigLineChartCategories"
                                 :key="option"
                                 class="btn btn-success btn-sm btn-simple"
@@ -34,45 +32,46 @@
                                     :checked="bigLineChart.activeIndex === index">
                                 {{ option }}
                             </label>
-                        </template>
+                        
                     </div>
                 </div>
             </div>
         </template>
         <!-- Chart(Line, Green) -->
-        <line-chart v-if="showChart"
-            class="chart-area"
-            ref="bigChart"
-            chart-id="big-line-chart"
-            :chart-data="bigLineChart.chartData"
-            :gradient-colors="bigLineChart.gradientColors"
-            :gradient-stops="bigLineChart.gradientStops"
-            :extra-options="bigLineChart.extraOptions">
-        </line-chart>
-        <card v-else class="ml-auto mr-auto">
-            <h3><i class="tim-icons icon-sound-wave"></i></h3>
-            <h3>Add Bookmarks for Stock Graph</h3>
-        </card>
+        <template v-if="showTitle">
+            <line-chart v-if="showChart" 
+                class="chart-area"
+                ref="bigChart"
+                chart-id="big-line-chart"
+                :chart-data="bigLineChart.chartData"
+                :gradient-colors="bigLineChart.gradientColors"
+                :gradient-stops="bigLineChart.gradientStops"
+                :extra-options="bigLineChart.extraOptions">
+            </line-chart>
+            <card v-else class="ml-auto mr-auto">
+                <h3><i class="tim-icons icon-sound-wave"></i></h3>
+                <h3>Loading Graph...</h3>
+            </card>
+        </template>
+        <template v-else>
+            <card class="ml-auto mr-auto">
+                <h3><i class="tim-icons icon-sound-wave"></i></h3>
+                <h3>Add Bookmarks for Stock Graph</h3>
+            </card>
+        </template>    
     </card>
 </template>       
 
 <script>
-
 import {
   Card
 } from "@/components/index";
-
 import LineChart from '@/components/Charts/LineChart';
 import * as chartConfigs from '@/components/Charts/config';
 import config from '@/config';
-
 import EventBus from '@/eventbus';
-
 import axios from 'axios'
-
-
 export default {
-
     components: {
         Card,
         LineChart
@@ -81,12 +80,10 @@ export default {
         return{
             showChart:false,
             showTitle:false,
-            // mem:false,
-            //stockData: {},
-            //고정값
-            corName : "",
 
-            //고정값...day, week, month
+            mlData:{},
+
+            //고정값
             bigLineChartCategories:[
                 "1Day",
                 "1Week",
@@ -97,9 +94,7 @@ export default {
                 "المشتريات",
                 "جلسات"
             ],
-
-            //stock data
-            
+            //stock data 
             bigLineChart: {
                 allData: [],
                 allDate:[],
@@ -122,14 +117,12 @@ export default {
     }
   },
   methods:{
-
     initBigChart(index, option) {
       if(option===undefined){
         option = "1D";
       }
       //if(this.data !== undefined) 
       EventBus.$emit('period', option[1]);
-
       let chartData = {
         datasets: [{
             fill: true,
@@ -144,29 +137,22 @@ export default {
             pointHoverRadius: 4,
             pointHoverBorderWidth: 15,
             pointRadius: 4,
-            //찾았다 데이터
-            data: this.bigLineChart.allData[index]
+           
+            data:[]
         }],
-        //라벨 여기있다
-        labels: this.bigLineChart.allDate[index]
+        labels:[]
       }
-      this.$refs.bigChart.updateGradients(chartData);
-      this.bigLineChart.chartData = chartData;
+      chartData.datasets[0].data=this.bigLineChart.allData[index];
+      chartData.labels=this.bigLineChart.allDate[index];
+      setTimeout(()=> {
+          this.$refs.bigChart.updateGradients(chartData);
+          this.bigLineChart.chartData = chartData;
+      }, 200); 
       this.bigLineChart.activeIndex = index;
     },
-    mounted(){
-        this.i18n = this.$i18n;
-        if (this.enableRTL) {
-            this.i18n.locale = 'ar';
-            this.$rtl.enableRTL();
-        }
-        this.initBigChart(0);
-        this.$LineChart.UpdateGradients();
-    },
-
     renderChart:async function(){
-        console.log('path',this.$router.currentRoute.path)
-		if(this.data===undefined){
+      console.log('path',this.$router.currentRoute.path)
+      if(this.data===undefined){
         // 0 값
             this.showTitle = false
             console.log("Stock chart, data undefined")
@@ -204,9 +190,11 @@ export default {
                     stock_code : this.data.stock_code
                     }
             })
-
             Promise.all([promise1, promise2, promise3])
                 .then((res)=>{
+                    this.mlData = res;
+                    console.log("mlData", this.mlData);
+
                     //console.log(res)
                     //this.stockData = res[0].data.data;
                     //console.log("get data from Back", this.stockData);
@@ -220,23 +208,46 @@ export default {
                 .catch((err)=>{
                     console.log(err);
                 })
-            
+                .finally(()=>{
+                  console.log("show show");
+                  
+                  setTimeout(()=> {
+                    this.showChart=true;
+                    this.initBigChart(0);
+                    console.log("true set timeout", this.bigLineChart.chartData);
+                  }, 200);
+                  
+                })          
         }
+    },
+    getMLdata: function(){
+        axios.get('/back/ml/predict/',{
+            params:{
+                date_type: this.mlData.info.date_type,
+                start_date: 1,
+                stock_code: this.data.stock_code
+            }
+        })
+        .then((res)=>{
+            console.log("get ML data", res.data);
+            this.mlData = res.data;
+        })
+        .catch(err=>{
+            console.log("MLdata-error", err);
+        })
     }
   },
   created:async function(){
-    await this.renderChart();
-    //console.log('here');
-    this.showChart=true;
+    //this.initBigChart(0, "1Day");
+    await this.renderChart(); // data 집어 넣는 부분
   },
   watch:{
-        async data(newVal,oldVal){      
+        async data(newVal,oldVal){
             this.showChart=false;
             console.log("Stock Chart changed:", oldVal,"->", newVal);
             await this.renderChart();	
             this.showChart=true;
         },
-
     },
   beforeDestroy() {
     if (this.$rtl.isRTL) {

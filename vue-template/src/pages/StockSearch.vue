@@ -66,7 +66,7 @@ import PatternSim from '@/components/PatternSim'
 import axios from "axios";
 
 
-const tableColumns = ["전일", "고가", "시가", "저가"];
+const tableColumns = ["Open", "High", "Low", "Close", "Volume"];
 
 export default {
     components:{
@@ -77,6 +77,12 @@ export default {
     },
     data(){
         return{
+            price:[],    
+            openP:'',
+            highP:'',
+            lowP:'',
+            closeP:'',
+            volumeP:'',
             details: {
                 title: "Simple Table",
                 columns: [...tableColumns],
@@ -117,26 +123,33 @@ export default {
     created: function(){
 	this.patternData = [this.name, this.$route.params.code]
         // 어떻게보면 주식 그래프 용도
-
         //yae - 다음에 MSFT-> stockName으로 바꿔주기
-        /*
-        axios.get("/back/stocks/data/MSFT")
+        // 어떻게 이렇게 잘 파싱해서 가져와서 넣으면 된다.
+
+        axios.get('/back/stocks/graph/', {
+            params: {
+                date_type : "day",
+                start_date : 1,
+                stock_code : this.$route.params.code
+            }
+        })
         .then(function(res){
-            console.log(res)
+            console.log("Searched data", res.data.data.value.slice(-1)[0]);
+            console.log("entries", Object.entries(res.data.data.value.slice(-1)[0]));
+            this.price=[];
+            this.price.push(Object.entries(res.data.data.value.slice(-1)[0]));
+            console.log("price", this.price);
         })
         .catch((err)=>{
             console.log(err)
         })
-        */
-       
-        // 어떻게 이렇게 잘 파싱해서 가져와서 넣으면 된다.
 
         var exData =[{
-            시가 : "83,700",
-            고가 : "85,000",
-            저가 : "84,500",
-            종가 : "82,000"
-
+            Open : this.openP,
+            High : this.highP,
+            Low : this.lowP,
+            Close : this.closeP,
+            Volume : this.volumeP
         }];
 
         this.details.data = exData;
