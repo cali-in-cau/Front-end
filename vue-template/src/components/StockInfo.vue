@@ -28,7 +28,7 @@
           </div>
           </template>
           <card v-else class="ml-auto mr-auto">
-                <h3><i class="tim-icons icon-chart-pie-36"></i></h3>
+                <h3><i class="tim-icons icon-planet"></i></h3>
                 <h3>Loading...</h3>
           </card>
 
@@ -55,6 +55,7 @@ export default {
     },
     data(){
         return{
+            temp:false,
             date:'',
             flag:'',
             showInfo:false,
