@@ -32,7 +32,7 @@
                     :show-close="true">
 
                     <template slot="header">
-                        <h3 class="modal-title" id="exampleModalLabel">Detail Similarity</h3>
+                        <h3 class="modal-title" id="exampleModalLabel">Detail Similarity in {{modalDate}}</h3>
                     </template>
                     
                     <bar-chart
@@ -55,6 +55,7 @@
                   :extra-options="similarity.extraOptions">
           </bar-chart>
           -->
+            
             <pie-chart v-if="showChart"
                   :chart-data="pieChart.chartData"
                   :extra-options="pieChart.extraOptions"
@@ -71,6 +72,8 @@
                         <h2 v-else>No data</h2> 
                     </div>
             </div>
+
+
         </card>
 </template>
 
@@ -88,9 +91,10 @@ import Modal from "@/components/Modal";
 
 import EventBus from '@/eventbus';
 
+import axios from 'axios';
+
 //Mock Data
-import pie from '@/pieData.json';
-import bar from '@/BarData.json';
+
 
 export default {
     components:{
@@ -101,7 +105,7 @@ export default {
     },
     data(){
         return{
-            period:"",
+            modalDate:"",
 	        showChart:false,
             modals: false,
 
@@ -151,75 +155,100 @@ export default {
     },
     methods:{
 	    renderChart:async function(){
-           	this.showChart = false; 
-		if(this.data===undefined){
-                // 0 값
-                this.pieChart.chartData.labels=[];
-                this.pieChart.chartData.labels.push("none");
-                this.pieChart.chartData.datasets[0].data=[];
-                this.pieChart.chartData.datasets[0].data.push(100);
-		this.showChart = true
-            }
+            if(this.data===undefined){
+                    this.showChart = false; 
+                    // 0 값
+                    this.pieChart.chartData.labels=[];
+                    this.pieChart.chartData.labels.push("none");
+                    this.pieChart.chartData.datasets[0].data=[];
+                    this.pieChart.chartData.datasets[0].data.push(100);
+                    this.showChart = true
+                }
             
             else{
-                await EventBus.$on('period', (payload)=>{
+                await EventBus.$on('period', async (payload)=>{
+                    this.showChart = false; 
                     //period 의 길이로 ML 서버가 아니라 이젠 스톡 차트에서 주는 데이터가 된다.
-                    this.period=payload;
-
-                    console.log("Pattern Sim period:", this.period);
-                    
+                    console.log("pattern event : ", payload);
+                    let type = ""
+                    if(payload =="D"){
+                        type="day";
+                    }else if(payload=="W"){
+                        type="week";
+                    }else{
+                        type="month";
+                    }
                     /* Pie Data */
-
-                    var temp =[]
-                    // 데이터 오는거 보고 파싱 잘해야함
-                    Object.keys(pie.talibv2).forEach(function(key) {
-                        temp.push({key:key.split('_')[0], count:pie.talibv2[key].length});
+                    await axios.get("/back/stocks/predict/pattern",{
+                        params:{
+                            date_type:type,
+                            stock_code:this.data.stock_code
+                        }
                     })
-                    temp.sort(function(a,b){
-                        return b.count -a.count;
-                    });
+                    .then((res)=>{
 
-                    // 상위 3개까지만 받을거기 때문에 3개 이상일 때에만 slice
-                    if(temp.length > 3){
-                        temp = temp.slice(0, 3);
-                    }
+                        var temp =[]
+                        // 데이터 오는거 보고 파싱 잘해야함
+                        Object.keys(res.data.talibv2).forEach(function(key) {
+                            temp.push({key:key.split('_')[0], count:res.data.talibv2[key].length});
+                        })
+                        temp.sort(function(a,b){
+                            return b.count -a.count;
+                        });
 
-                    var sumCount = 0;
-                    for(var i = 0 ; i < temp.length; i++){
-                        sumCount += temp[i].count;
-                    }
+                        // 상위 3개까지만 받을거기 때문에 3개 이상일 때에만 slice
+                        if(temp.length > 3){
+                            temp = temp.slice(0, 3);
+                        }
+
+                        var sumCount = 0;
+                        for(var i = 0 ; i < temp.length; i++){
+                            sumCount += temp[i].count;
+                        }
 
 
-                    this.pieChart.chartData.labels=[]
-                    this.pieChart.chartData.datasets[0].data=[]
+                        this.pieChart.chartData.labels=[]
+                        this.pieChart.chartData.datasets[0].data=[]
 
-                    for(var j = 0 ; j < temp.length; j++){
-                        this.pieChart.chartData.labels.push(temp[j].key)
-                        this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );
+                        for(var j = 0 ; j < temp.length; j++){
+                            this.pieChart.chartData.labels.push(temp[j].key)
+                            this.pieChart.chartData.datasets[0].data.push( parseInt((temp[j].count / sumCount) *100) );   
+                        }
                         
-                    }
-                    /* Modal Data */
-                    var modal = bar["2021-01-02"].slice(0,5)
+                        let newestDate="";
+                        Object.keys(res.data.image_prediction).sort().forEach(function(key) {
+                            newestDate=key;
+                        });
+                        this.modalDate=newestDate;
+                        /* Modal Data */
+                        var modal = res.data.image_prediction[newestDate].slice(0,5)
 
-                    this.detailSimilarity.chartData.labels = [];
-                    this.detailSimilarity.chartData.datasets[0].data = [];
+                        this.detailSimilarity.chartData.labels = [];
+                        this.detailSimilarity.chartData.datasets[0].data = [];
 
-                    for(var k = 0 ; k < modal.length ; k++){
+                        for(var k = 0 ; k < modal.length ; k++){
 
-                        var patternName = modal[k][0].split("_")[0]
-                        this.detailSimilarity.chartData.labels.push(patternName);
-                        this.detailSimilarity.chartData.datasets[0].data.push(parseInt(modal[k][1]*100))
-                        
-                    }
-			this.showChart=true;
+                            var patternName = modal[k][0].split("_")[0]
+                            this.detailSimilarity.chartData.labels.push(patternName);
+                            this.detailSimilarity.chartData.datasets[0].data.push(parseInt(modal[k][1]*100))
+                            
+                        }
+
+
+                    })
+                    .catch((err)=>{
+                        console.log(err);
+                    })   
+                    .finally(()=>{
+                        this.showChart=true;
+                    }) 
+
                 })
         }
 
         }
     },
     created:async function(){
-        
-        console.log("crated pattern sim");
         await this.renderChart();	
         //this.showChart=true;
     }

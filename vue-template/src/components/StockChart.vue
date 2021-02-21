@@ -122,23 +122,13 @@ export default {
   },
   methods:{
     initBigChart(index, option) {
-	
-      let idx = 0;
+
       if(option===undefined){
         option = "1D";
-      }else{
-
-	let period = option[1];
-
-	if(period=="W"){
-		idx = 1;
-	}else if(period=="M"){
-		idx =2;
-	}
       }
 
-      if(this.data !== undefined) 
-      	EventBus.$emit('period', this.passingData[idx].data);
+      //if(this.data !== undefined) 
+      	EventBus.$emit('period', option[1]);
 
       let chartData = {
         datasets: [{
