@@ -47,6 +47,8 @@ export default {
     },
     data(){
         return{
+            //date:'',
+            flag:'',
             showInfo:false,
             // 버튼에 불들어오게 하려면 false값이 들어가야함
             isBull:true,
@@ -84,15 +86,17 @@ export default {
             }
           })
           .then((res)=>{
-            Object.keys(res.data)
-
+            var date = Object.keys(res.data);
+            this.flag = res.data[date].stock;
+            this.predictedPrice =res.data[date].price_predict;
           })
           //if stockInfoData.
-          this.isBull=false;
-          this.isBear=true;
-          this.predictedPrice=83000;
-
-          
+          if(this.flag=='bull'){
+            this.isBull=false;
+          }
+          else{
+            this.isBear=false;
+          }        
         }
       }
 
