@@ -210,7 +210,7 @@ export default {
                         this.bigLineChart.allData.push(res[i].data.data.value.map(a=>a.Close));
                         this.bigLineChart.allDate.push(res[i].data.data.date);       
                     }
-                    //console.log("allData", this.bigLineChart.allData);
+                    console.log("allData", this.bigLineChart.allData);
                     //console.log("allDate", this.bigLineChart.allDate); 
                 })
                 .catch((err)=>{

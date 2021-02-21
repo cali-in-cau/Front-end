@@ -39,6 +39,8 @@ import {
   Card
 } from "@/components/index";
 
+//import stockInfoData from '@/src/stockInfoData';
+
 export default {
     components: {
         Card
@@ -55,9 +57,7 @@ export default {
     props:['data'],
     watch:{
         async data(newVal,oldVal){
-            
             console.log("StockInfo changed:", oldVal,"->", newVal);
-            
             await this.renderChart();	
         },
 
@@ -77,6 +77,14 @@ export default {
                   
         }else{
           // ML 결과 받아오기 , axios
+          // axios.get("/back/stocks/predict/stockinfo",{
+          //   params:{
+          //     date_type: '',
+          //     stock_code:this.da
+          //   }
+
+          // })
+          //if stockInfoData.
           this.isBull=false;
           this.isBear=true;
           this.predictedPrice=83000;

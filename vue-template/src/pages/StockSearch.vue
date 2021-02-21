@@ -117,26 +117,28 @@ export default {
 
         },
     },
-    created: function(){
+    created: async function(){
         this.mainStock = { "stock_name":this.name, "stock_code":this.$route.params.code};
         // 어떻게보면 주식 그래프 용도
         //yae - 다음에 MSFT-> stockName으로 바꿔주기
         // 어떻게 이렇게 잘 파싱해서 가져와서 넣으면 된다.
 
-        axios.get('/back/stocks/graph/', {
+        await axios.get('/back/stocks/graph/', {
             params: {
                 date_type : "day",
-                start_date : 1,
+                start_date : 5,
                 stock_code : this.$route.params.code
             }
         })
         .then(function(res){
             //미완
-            console.log("Searched data", res.data.data.value.slice(-1)[0]);
-            //console.log("entries", Object.entries(res.data.data.value.slice(-1)[0]));
-            //this.price=[];
-            this.details.data.push(Object.entries(res.data.data.value.slice(-1)[0]));
-            console.log("price", this.details.data);
+            console.log("Searched Recent data", (res.data.data.value.slice(-1)[0]));
+            console.log("Recent data Array", Object.values(res.data.data.value.slice(-1)[0]));
+            //this.details.data = [];
+            var tm = (Object.values(res.data.data.value.slice(-1)[0]));
+            console.log("tm test", tm);
+            this.details.data = tm;
+            console.log('please',this.details.data);
         })
         .catch((err)=>{
             console.log(err)
