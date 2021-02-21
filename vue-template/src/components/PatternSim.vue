@@ -180,7 +180,6 @@ export default {
                         }
                     })
                     .then((res)=>{
-                        console.log("get ML Data from Pattern", res);
 
                         var temp =[]
                         // 데이터 오는거 보고 파싱 잘해야함
@@ -212,7 +211,7 @@ export default {
                         
                         let newestDate="";
                         Object.keys(res.data.image_prediction).sort().forEach(function(key) {
-                            newestData=key;
+                            newestDate=key;
                         });
 
                         /* Modal Data */
