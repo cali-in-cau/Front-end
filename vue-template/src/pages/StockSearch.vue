@@ -23,7 +23,9 @@
                         </div>
                     </div>
                     
-                        <h2 class>{{stockPrice}}원</h2>
+                        <h2 class v-if="showStock">{{stockPrice}}원</h2>
+                        <h2 class v-else>Loading!</h2>
+
                     </template>
                 </card>
             </div>
@@ -32,12 +34,16 @@
                 <card>
                     <template slot="header">
                         <h2 class="card-category">Details</h2>
-                        <div class="table-responsive text-left">
+
+                        <div v-if="showStock" class="table-responsive text-left">
                             <base-table :data="details.data"
                                         :columns="details.columns"
                                         thead-classes="text-primary">
                             </base-table>
                         </div>
+
+                        <h3 v-else>Loading!</h3>
+
                     </template>
                 </card>
             </div>
@@ -80,6 +86,7 @@ export default {
     },
     data(){
         return{
+            showStock:false,
             details: {
                 title: "Simple Table",
                 columns: [...tableColumns],
@@ -130,7 +137,7 @@ export default {
                 stock_code : this.$route.params.code
             }
         })
-        .then(function(res){
+        .then((res)=>{
             //미완
             console.log("Searched Recent data", (res.data.data.value.slice(-1)[0]));
             console.log("Recent data Array", Object.values(res.data.data.value.slice(-1)[0]));
@@ -139,6 +146,9 @@ export default {
             console.log("tm test", tm);
             this.details.data = tm;
             console.log('please',this.details.data);
+            
+            this.showStock = true;
+            console.log("showStock true");
         })
         .catch((err)=>{
             console.log(err)
