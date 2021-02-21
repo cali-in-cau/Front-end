@@ -127,7 +127,7 @@ export default {
   },
   data(){
     return{
-      mainStock:{stock_code:"005930", stock_name:"삼성전자"},
+      mainStock:{stock_code:"AAPL", stock_name:"APPLE Inc"},
       //user Info
       info:"non",
       //Stock Info

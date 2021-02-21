@@ -188,21 +188,21 @@ export default {
             const promise1 = axios.get('/back/stocks/graph/',{
                 params: {
                     date_type : "day",
-                    start_date : 3,
+                    start_date : 30,
                     stock_code : this.data.stock_code
                     }
             })
             const promise2 = axios.get('/back/stocks/graph/', {
                 params: {
                     date_type : "week",
-                    start_date : 7,
+                    start_date : 84,
                     stock_code : this.data.stock_code
                     }
             })
             const promise3 = axios.get('/back/stocks/graph/', {
                 params: {
                     date_type : "month",
-                    start_date : 15,
+                    start_date : 360,
                     stock_code : this.data.stock_code
                     }
             })

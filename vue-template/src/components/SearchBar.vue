@@ -71,17 +71,21 @@ export default {
     methods:{
         //Search 연동 - yae
         searchStock(stockName){
-            axios.get(`/back/stocks/search/${stockName}`)
+            axios.get('/back/stocks/search/',{
+                params: {
+                    keyword: stockName
+                }    
+            })
                 .then((res)=>{
                     //res data 여기에 넣어주기
-                	this.stockList = res.data.result;
-                	this.showSearch = true;
+                   this.stockList = res.data.result;
+                   this.showSearch = true;
                 })
                 .catch((err)=>{
                     console.log(err);
                 })
                 
-        },
+        }, 
         nextPage () {
             this.pageNum += 1;
         },
