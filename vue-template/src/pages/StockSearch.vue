@@ -77,12 +77,6 @@ export default {
     },
     data(){
         return{
-            price:[],    
-            openP:'',
-            highP:'',
-            lowP:'',
-            closeP:'',
-            volumeP:'',
             details: {
                 title: "Simple Table",
                 columns: [...tableColumns],
@@ -109,7 +103,6 @@ export default {
             .catch((err)=>{
                 console.log(err)
             });
-
             axios.post("/back/users/favorite/add/" + this.$route.params.code, {token:this.token})
             .then((res)=>{
                 console.log("favorite add res: ", res)
@@ -134,25 +127,26 @@ export default {
             }
         })
         .then(function(res){
+            //미완
             console.log("Searched data", res.data.data.value.slice(-1)[0]);
-            console.log("entries", Object.entries(res.data.data.value.slice(-1)[0]));
-            this.price=[];
-            this.price.push(Object.entries(res.data.data.value.slice(-1)[0]));
-            console.log("price", this.price);
+            //console.log("entries", Object.entries(res.data.data.value.slice(-1)[0]));
+            //this.price=[];
+            this.details.data.push(Object.entries(res.data.data.value.slice(-1)[0]));
+            console.log("price", this.details.data);
         })
         .catch((err)=>{
             console.log(err)
         })
 
-        var exData =[{
-            Open : this.openP,
-            High : this.highP,
-            Low : this.lowP,
-            Close : this.closeP,
-            Volume : this.volumeP
-        }];
+        // var exData =[{
+        //     Open : this.openP,
+        //     High : this.highP,
+        //     Low : this.lowP,
+        //     Close : this.closeP,
+        //     Volume : this.volumeP
+        // }];
 
-        this.details.data = exData;
+        //this.details.data = exData;
         
         var currentPath = this.$router.currentRoute.path;
 
