@@ -150,18 +150,19 @@ export default {
     methods:{
 
 	    renderChart:async function(){
-           	this.showChart = false; 
-		if(this.data===undefined){
-                // 0 값
-                this.pieChart.chartData.labels=[];
-                this.pieChart.chartData.labels.push("none");
-                this.pieChart.chartData.datasets[0].data=[];
-                this.pieChart.chartData.datasets[0].data.push(100);
-		this.showChart = true
-            }
+            if(this.data===undefined){
+                    this.showChart = false; 
+                    // 0 값
+                    this.pieChart.chartData.labels=[];
+                    this.pieChart.chartData.labels.push("none");
+                    this.pieChart.chartData.datasets[0].data=[];
+                    this.pieChart.chartData.datasets[0].data.push(100);
+                    this.showChart = true
+                }
             
             else{
                 await EventBus.$on('period', async (payload)=>{
+                    this.showChart = false; 
                     //period 의 길이로 ML 서버가 아니라 이젠 스톡 차트에서 주는 데이터가 된다.
                     console.log("pattern event : ", payload);
                     let type = ""
@@ -230,16 +231,13 @@ export default {
 
 
                     })
-
-
-
                     .catch((err)=>{
                         console.log(err);
-                    })    
-                    
-                    
-                    
-			this.showChart=true;
+                    })   
+                    .finally(()=>{
+                        this.showChart=true;
+                    }) 
+
                 })
         }
 
