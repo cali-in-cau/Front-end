@@ -7,7 +7,9 @@
           <h5 class="card-category">Real Time Information</h5>
           <h3 class="card-title"><i class="tim-icons icon-chart-bar-32 text-primary "></i>Stock Info</h3>
         </template>
-          <div v-if="showInfo" class="content">
+
+          <template v-if="showInfo">
+          <div class="content">
             <div class="row" style="margin:1rem;">
               <div class="ml-auto mr-auto">
                 <h4 class="d-inline" style="margin-right:2rem;">Status</h4>
@@ -24,6 +26,11 @@
             </div>
 
           </div>
+          </template>
+          <card v-else class="ml-auto mr-auto">
+                <h3><i class="tim-icons icon-chart-pie-36"></i></h3>
+                <h3>Loading...</h3>
+          </card>
 
           <div class="card-footer">
             <p style="margin-top:1.9rem;">* All informations are made by C.I.C *</p>
@@ -67,16 +74,16 @@ export default {
     },
     methods:{
 	    renderChart:async function(){
-        
-        
         if(this.data===undefined){
         // 0 값
+          this.showInfo = false;
           this.isBull=true;
           this.isBear=true;
           this.predictedPrice=0;
           this.showInfo = true;
                   
         }else{
+          this.showInfo = false;
           // ML 결과 받아오기 , axios
           axios.get("/back/stocks/predict/stockinfo",{
             params:{
