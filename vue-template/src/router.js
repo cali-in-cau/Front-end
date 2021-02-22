@@ -55,7 +55,7 @@ const routes = [
         .then((res)=>{
           if(res.data.success == false){
             alert('로그인 해주세요!');
-            next();
+            next("/");
             }
         })
         .catch((err)=>{

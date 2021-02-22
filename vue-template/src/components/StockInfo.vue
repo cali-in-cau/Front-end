@@ -12,7 +12,6 @@
           <div class="content">
             <div class="row" style="margin:1rem;">
               <div class="ml-auto mr-auto">
-                <h4 class="d-inline" style="margin-right:2rem;">Status</h4>
                 <button :disabled="isBull"  type="button" class="btn animation-on-hover btn-success d-inline">Bullish</button>
                 <button :disabled="isBear"  type="button" class="btn animation-on-hover btn-warning d-inline">Bearish</button>
               </div>
@@ -81,6 +80,8 @@ export default {
           this.showInfo = false;
           this.isBull=true;
           this.isBear=true;
+	  this.bullPercent=0;
+	  this.bearPercent=0;
           this.predictedPrice=0;
           this.showInfo = true;
                   

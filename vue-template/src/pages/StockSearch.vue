@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     
-                        <h2 class v-if="showStock">{{stockPrice}}원</h2>
+                        <h2 class v-if="showStock">{{stockPrice}}$</h2>
                         <h2 class v-else>Loading!</h2>
 
                     </template>
@@ -147,6 +147,7 @@ export default {
                 volume : res.data.data.value.slice(-1)[0].Volume,
                 change:res.data.data.value.slice(-1)[0].Change
             }];
+	    this.stockPrice = exData[0].close;
             this.details.data = exData;
             this.showStock = true;
         })
