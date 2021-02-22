@@ -42,24 +42,13 @@
       </div>
       <!-- Notification -->
       <div class="col-lg-4">
-        <card class="card">
+        <card class="card" style="height:330px;">
           <template slot="header">
-            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-success "></i> 4+</h3>
+            <h3 class="card-title"><i class="tim-icons icon-planet text-primary "></i>About Us</h3>
+            <div class="card-body" style="margin-top:80px;">
+            <img src="@/assets/img/ourlogo.png" class="ml-auto mr-auto">
+            </div>
           </template>
-          <div class="content">
-            <base-alert type="success" dismissible>
-              <span><b> BULL - </b> CAB Inc. : +14.51% </span>
-            </base-alert>
-            <base-alert type="danger" dismissible>
-              <span><b> BEAR - </b> ABC corp. : -13.22%  </span>
-            </base-alert>
-            <base-alert type="info" dismissible>
-              <span><b> Info - </b> normal notification </span>
-            </base-alert>
-            <base-alert type="danger" dismissible>
-              <span><b> BEAR - </b> XYZ corp. : -7.83%  </span>
-            </base-alert>
-          </div>
         </card>
       </div>
       
@@ -87,7 +76,7 @@ import StockChart from '@/components/StockChart';
 import PatternSim from '@/components/PatternSim';
 import StockInfo from '@/components/StockInfo';
 
-import BaseAlert from '@/components/BaseAlert';
+
 //import BaseButton from '@/components/BaseButton';
 import NotificationTemplate from './Notifications/NotificationTemplate';
 
@@ -101,7 +90,6 @@ export default {
     StockChart,
     PatternSim,
     StockInfo,
-    BaseAlert
     //BaseButton
   },
   data(){

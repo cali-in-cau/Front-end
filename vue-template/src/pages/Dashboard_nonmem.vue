@@ -16,20 +16,13 @@
 
       <!-- Annie News -->
       <div class="col-4">
-        <card class="card">
+        <card class="card" style="height:330px;">
           <template slot="header">
-            <h3 class="card-title"><i class="tim-icons icon-planet text-primary "></i>News</h3>
+            <h3 class="card-title"><i class="tim-icons icon-planet text-primary "></i>About Us</h3>
+            <div class="card-body" style="margin-top:80px;">
+            <img src="@/assets/img/ourlogo.png" class="ml-auto mr-auto">
+            </div>
           </template>
-          <div class="table-responsive">
-            <p>news example1</p>
-            <p>news example2</p>
-            <p>news example3</p>
-            <p>news example4</p>
-            <p>news example5</p>
-            <p>news example6</p>
-            <p>news example7</p>
-            <p>news example8</p>
-          </div>
         </card>
       </div>
     </div>
