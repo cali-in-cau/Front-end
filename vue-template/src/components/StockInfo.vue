@@ -20,8 +20,8 @@
 
             <div class="row">
               <div class="ml-auto mr-auto">
-                <h4 class="d-inline" style="margin-right:2rem;">Predicted Price : </h4>
-                <h3 class="d-inline" style="margin-right:2rem;">{{predictedPrice}}원</h3>
+                <h3 style="margin-top:0; margin-bottom:0;">Bull : {{bullPercent}}% </h3>
+                <h3 style="margin-top:0; margin-bottom:0;">Bear : {{bearPercent}}% </h3>
               </div>
             </div>
 
@@ -33,7 +33,7 @@
           </card>
 
           <div class="card-footer">
-            <p style="margin-top:1.9rem;">* All informations are made by C.I.C *</p>
+            <p>* All informations are made by C.I.C *</p>
           </div>
 
         </card>  
@@ -62,7 +62,8 @@ export default {
             // 버튼에 불들어오게 하려면 false값이 들어가야함
             isBull:true,
             isBear:true,
-            predictedPrice:0
+            bullPercent:0,
+            bearPercent:0
         }
     },
     props:['data'],
@@ -88,26 +89,40 @@ export default {
           // ML 결과 받아오기 , axios
           axios.get("/back/stocks/predict/stockinfo",{
             params:{
-              date_type: '1',
+              date_type: 'day',
               stock_code:this.data.stock_code
             }
           })
           .then((res)=>{
             console.log("Mock data", res);
-        
-        
-            Object.keys(res).forEach((key)=> {
-                this.date = key;
-            })
+
+            this.date=res.data.date;
             console.log("key date", this.date);
 
-            this.predictedPrice = res[this.date].price_predict;
-            console.log("predicted price", this.predictedPrice);
 
-            if(res[this.date].stock=="bull"){
+            if(res.data.stock=="bull"){
               this.isBull=false;
+
+                if(res.data.prob[0] > res.data.prob[1]){
+
+                        this.bullPercent = res.data.prob[0];
+                        this.bearPercent = res.data.prob[1];
+                }else{
+                        this.bullPercent = res.data.prob[1];
+                        this.bearPercent = res.data.prob[0];
+
+                }
             }else{
               this.isBear=false;
+                if(res.data.prob[0] > res.data.prob[1]){
+
+                        this.bearPercent = parseInt(res.data.prob[0]*100);
+                        this.bullPercent = parseInt (res.data.prob[1]*100);
+                }else{
+                        this.bearPercent = parseInt(res.data.prob[1]*100);
+                        this.bullPercent = parseInt(res.data.prob[0]*100);
+
+                }
             }
 
             this.showInfo = true;
